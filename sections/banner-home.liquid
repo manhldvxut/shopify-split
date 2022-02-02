@@ -1,0 +1,46 @@
+{%- render 'banner', section: section -%}
+
+{% schema %}
+  {
+    "name": "t:sections.split-extra-words.sections.promotions.names.home",
+    "class": "mount-popup",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "banner_enable",
+        "label": "t:sections.split-extra-words.sections.promotions.settings.show",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "banner_title",
+        "label": "t:sections.split-extra-words.settings_schema.headings.title",
+        "default": "Promotional banner"
+      },
+      {
+        "type": "text",
+        "id": "banner_subtitle",
+        "label": "t:sections.split-extra-words.settings_schema.headings.subtitle",
+        "default": "Use this to inform your customers about flash sales or new products!"
+      },
+      {
+        "type": "url",
+        "id": "banner_link",
+        "label": "t:sections.split-extra-words.sections.promotions.settings.link",
+        "info": "t:sections.split-extra-words.sections.promotions.settings.link_info"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "t:sections.split-extra-words.sections.promotions.settings.background",
+        "default": "#d2d2d2"
+      },
+      {
+        "type": "color",
+        "id": "txt_color",
+        "label": "t:sections.split-extra-words.sections.promotions.settings.text",
+        "default": "#000000"
+      }
+    ]
+  }
+{% endschema %}

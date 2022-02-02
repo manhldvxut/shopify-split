@@ -1,0 +1,43 @@
+{%- if paginate.pages > 1 -%}
+
+	<div class="pagination pagination--{{ style }}" {% if paginate.previous %} style="margin-left: -15px" {% endif %}>
+		
+		{%- if paginate.previous -%}
+			<span class="prev">
+				<a href="{{ paginate.previous.url }}" title="{{ paginate.previous.title }}">
+					<span aria-label="{{ 'general.paginate.previous_page' | t }}" role="img">
+						<svg width="8" height="13" viewBox="0 0 8 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path d="M1.46442 7.94185L0.0502109 6.52764L6.53549 0.0423586L7.94971 1.45657L1.46442 7.94185Z" fill="#262627"/>
+							<path d="M0.0503636 6.49961L1.46458 5.0854L7.94986 11.5707L6.53564 12.9849L0.0503636 6.49961Z" fill="#262627"/>
+						</svg>
+					</span>
+				</a>
+			</span>
+		{%- endif -%}
+
+		{%- for part in paginate.parts -%}
+			{%- if part.is_link -%}
+				<a class="page" href="{{ part.url }}" title="">{{ part.title | escape }}</a>
+			{%- else -%}
+				{%- if part.title == paginate.current_page -%}
+					<span class="page current">{{ part.title | escape }}</span>
+				{% else %}
+					<span class="page" style="opacity:.66">{{ part.title | escape }}</span>
+				{%- endif -%}
+			{%- endif -%}
+		{%- endfor -%}
+
+		{%- if paginate.next -%}
+			<a class="next" href="{{ paginate.next.url }}" title="{{ paginate.next.title }}">
+				<span aria-label="{{ 'general.paginate.next_page' | t }}" role="img">
+					<svg width="8" height="13" viewBox="0 0 8 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M6.53557 5.08537L7.94979 6.49958L1.46451 12.9849L0.0502931 11.5706L6.53557 5.08537Z" fill="#262627"/>
+						<path d="M7.94964 6.52761L6.53542 7.94182L0.050142 1.45654L1.46436 0.0423289L7.94964 6.52761Z" fill="#262627"/>
+					</svg>
+				</span> 
+			</a>
+		{%- endif -%}
+
+	</div>
+
+{%- endif -%}

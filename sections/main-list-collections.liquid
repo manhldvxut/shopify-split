@@ -1,0 +1,256 @@
+{%- if section.settings.custom_background != 'rgba(0,0,0,0)' -%}
+  {%- assign custom_overlay = true -%}
+  <style>
+    #section-{{ section.id }} .site-box-background.with-image:after {
+      background: {{ section.settings.custom_overlay }};
+    }
+  </style>
+{%- endif -%}
+{%- if section.settings.custom_text != 'rgba(0,0,0,0)' -%}
+  <style>
+    #section-{{ section.id }} .box__collections {
+      --main-text: {{ section.settings.custom_text }};
+    }
+  </style>
+{%- endif -%}
+
+<div id="section-{{ section.id }}" class="site-box-container container--fullscreen box--can-stick">
+
+  <div class="site-box box--big lap--box--small-fl-auto box--typo-big box--top-align box--column-flow box__heading" data-order="0">
+    <div class="reduce-top-margin">
+      <div class="site-box-content ">
+        <h1 class="title h1">
+          {{ 'collections.general.all_collections' | t }}
+        </h1>
+        {%- if settings.headings_hr -%} <hr /> {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  <div class="site-box box--big lap--box--bigger box--center-align box--column-flow box--no-padding box__collections remove-first-border" data-order="1">
+
+    {%- liquid
+
+      assign collection_count = 0
+      assign isEmpty = true
+
+      if section.settings.display_type == 'all'
+        case section.settings.sort
+          when 'products_high' or 'products_low'
+            assign list_collections = collections | sort: 'all_products_count'
+          when 'date' or 'date_reversed'
+            assign list_collections = collections | sort: 'published_at'
+          else
+            assign list_collections = collections
+        endcase
+        for collection in list_collections
+          unless collection.handle == 'frontpage'
+            assign collection_count = collection_count | plus: 1
+          endunless
+        endfor
+      else
+        assign collection_count = section.blocks.size
+      endif
+
+      if collection_count > 0
+        assign isEmpty = false
+      endif
+
+      if section.settings.display_type == 'all'
+
+        if section.settings.sort == 'products_low' or section.settings.sort == 'date' or section.settings.sort == 'alphabetical'
+
+          if isEmpty
+            echo '<div class="site-box box--big box--center-align box--no-padding box--column-flow"><p>'
+              echo 'collections.general.no_collections' | t
+            echo '</p></div>'
+          else
+            assign custom_index = -1
+            for collection in list_collections
+              if collection.handle == 'frontpage'
+                continue
+              else 
+                assign custom_index = custom_index | plus: 1
+              endif
+              render 'collection-item', collection: collection, id: section.id, size: forloop.length, text_alignment: section.settings.text_alignment, custom_overlay: custom_overlay, index: forloop.index
+            endfor
+          endif
+
+        else
+
+          if isEmpty
+            echo '<div class="site-box box--big box--center-align box--no-padding box--column-flow"><p>'
+              echo 'collections.general.no_collections' | t
+            echo '</p></div>'
+          else
+            assign custom_index = -1
+            for collection in list_collections reversed
+              if collection.handle == 'frontpage'
+                continue
+              else 
+                assign custom_index = custom_index | plus: 1
+              endif
+              render 'collection-item', collection: collection, id: section.id, size: forloop.length, text_alignment: section.settings.text_alignment, custom_overlay: custom_overlay, index: forloop.index
+            endfor
+          endif
+
+        endif
+
+      else
+
+        for block in section.blocks
+          render 'collection-item', collection: block.settings.collection, block: block, id: block.id, size: section.blocks.size, text_alignment: section.settings.text_alignment, custom_overlay: custom_overlay, index: forloop.index
+        endfor
+
+      endif
+
+    -%}
+
+  </div>
+
+</div>
+
+{% schema %}
+  {   
+    "name": "t:sections.main-list-collections.name",
+    "class": "section-w-mobile-padding section-w-margin",
+    "settings": [
+      {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "t:sections.image-with-text.settings.text_alignment.label",
+        "options": [
+          {
+            "value": "horizontal-left vertical-top",
+            "label": "t:sections.image-with-text.settings.text_alignment.options__1.label"
+          },
+          {
+            "value": "horizontal-center vertical-top",
+            "label": "t:sections.image-with-text.settings.text_alignment.options__2.label"
+          },
+          {
+            "value": "horizontal-right vertical-top",
+            "label": "t:sections.image-with-text.settings.text_alignment.options__3.label"
+          },
+          {
+            "value": "horizontal-left vertical-middle",
+            "label": "t:sections.image-with-text.settings.text_alignment.options__4.label"
+          },
+          {
+            "value": "horizontal-center vertical-middle",
+            "label": "t:sections.image-with-text.settings.text_alignment.options__5.label"
+          },
+          {
+            "value": "horizontal-right vertical-middle",
+            "label": "t:sections.image-with-text.settings.text_alignment.options__6.label"
+          },
+          {
+            "value": "horizontal-left vertical-bottom",
+            "label": "t:sections.image-with-text.settings.text_alignment.options__7.label"
+          },
+          {
+            "value": "horizontal-center vertical-bottom",
+            "label": "t:sections.image-with-text.settings.text_alignment.options__8.label"
+          },
+          {
+            "value": "horizontal-right vertical-bottom",
+            "label": "t:sections.image-with-text.settings.text_alignment.options__9.label"
+          }
+        ],
+        "default": "horizontal-left vertical-bottom"
+      },
+      {
+        "type": "header",
+        "content": "t:sections.split-extra-words.settings_schema.colors.headings.custom_colors"
+      },
+      {
+        "type": "color",
+        "id": "custom_text",
+        "label": "t:sections.split-extra-words.settings_schema.colors.settings.text",
+        "default": "rgba(0,0,0,0)"
+      },
+      {
+        "type": "color",
+        "id": "custom_overlay",
+        "label": "t:sections.split-extra-words.sections.image-with-text.settings.overlay.label",
+        "default": "rgba(0,0,0,0)"
+      },
+      {
+        "type": "header",
+        "content": "t:sections.main-list-collections.settings.header.content"
+      },
+      {
+        "type": "paragraph",
+        "content": "t:sections.main-list-collections.settings.paragraph.content"
+      },
+      {
+        "type": "radio",
+        "id": "display_type",
+        "label": "t:sections.main-list-collections.settings.display_type.label",
+        "default": "all",
+        "options": [
+          {
+            "value": "all",
+            "label": "t:sections.main-list-collections.settings.display_type.options__1.label"
+          },
+          {
+            "value": "selected",
+            "label": "t:sections.main-list-collections.settings.display_type.options__2.label"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "sort",
+        "label": "t:sections.main-list-collections.settings.sort.label",
+        "info": "t:sections.main-list-collections.settings.sort.info",
+        "default": "alphabetical",
+        "options": [
+          {
+            "value": "alphabetical",
+            "label": "t:sections.main-list-collections.settings.sort.options__1.label"
+          },
+          {
+            "value": "alphabetical_reversed",
+            "label": "t:sections.main-list-collections.settings.sort.options__2.label"
+          },
+          {
+            "value": "date_reversed",
+            "label": "t:sections.main-list-collections.settings.sort.options__3.label"
+          },
+          {
+            "value": "date",
+            "label": "t:sections.main-list-collections.settings.sort.options__4.label"
+          },
+          {
+            "value": "products_high",
+            "label": "t:sections.main-list-collections.settings.sort.options__5.label"
+          },
+          {
+            "value": "products_low",
+            "label": "t:sections.main-list-collections.settings.sort.options__6.label"
+          }
+        ]
+      }
+    ],
+    "blocks": [
+      {
+        "type": "collection",
+        "name": "t:sections.main-list-collections.blocks.collection.name",
+        "settings": [
+          {
+            "type": "collection",
+            "id": "collection",
+            "label": "t:sections.main-list-collections.blocks.collection.settings.collection.label"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "t:sections.main-list-collections.blocks.collection.settings.image.label",
+            "info": "t:sections.main-list-collections.blocks.collection.settings.image.info"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

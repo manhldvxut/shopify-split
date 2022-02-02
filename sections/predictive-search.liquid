@@ -1,0 +1,103 @@
+{%- if predictive_search.performed -%}
+
+  <div class="sidebar__search-container">
+    <div class="sidebar__search-results">
+
+			{%- if predictive_search.resources.products.size > 0 -%}
+				{%- for product in predictive_search.resources.products -%}
+					<a class="search-item" href="{{ product.url }}" title="{{ product.title }}" tabindex="-1"">
+						<div class="thumbnail" >
+							{%- if product.featured_media != blank -%}
+								<img
+									src="{{ product.featured_media | img_url: '110x110_crop_center' }}"
+									srcset="{{ product.featured_media | img_url: '110x110_crop_center' }} 110w, {{ product.featured_media | img_url: '220x220_crop_center' }} 220w"
+									sizes="110px"
+                	alt="{{ product.featured_media.alt }}"
+                	loading="lazy" class="lazy"
+                	width="110" height="110" 
+                />
+							{%- else -%}
+								<span class="onboarding-svg">{{ 'product-1' | placeholder_svg_tag }}</span>
+							{%- endif -%}
+						</div>
+						<div class="content">
+							<span class="item-title"><span class="underline-animation">{{ product.title }}</span></span>
+							<span class="caption">
+								{%- if settings.predictive_search_show_price -%}
+									{%- assign variant = product.selected_or_first_available_variant -%}
+									<span class="item-price text-size--smaller">
+										<span class="visually-hidden">{{ 'general.accessibility_labels.price.regular' | t }}</span>
+										<strong>{{ variant.price | money }}</strong>
+	      						{%- if variant.compare_at_price > variant.price -%}
+											<span class="visually-hidden">{{ 'general.accessibility_labels.price.sale' | t }}</span>
+											<del>{{ variant.compare_at_price | money }}</del>
+	        					{%- endif -%}
+									</span>
+								{%- endif -%}
+								{%- if settings.predictive_search_show_vendor -%}
+    							<span class="text-size--smallest" style="display:block;margin-top:8px">{{ 'product.vendor_html' | t: vendor: product.vendor }}</span>
+								{%- endif -%}
+							</span>
+						</div>
+					</a>
+				{%- endfor -%}
+			{%- endif -%}
+
+			{%- if predictive_search.resources.collections.size > 0 -%}
+				<span class="sidebar-divider">{{ 'general.search.collection_results_title' | t }}</span>
+				{%- for collection in predictive_search.resources.collections -%}
+					<a class="search-item article smaller-margin" href="{{ collection.url }}" tabindex="-1">
+						<div class="content"><span class="item-title"><span class="underline-animation">{{ collection.title }}</span></span></div>
+					</a>
+				{%- endfor -%}
+			{%- endif -%}
+
+			{%- if settings.predictive_search_include_articles and predictive_search.resources.articles.size > 0 -%}
+				{%- assign date_format = 'general.date_format.month_day_year' | t -%}
+				<span class="sidebar-divider">{{ 'general.search.article_results_title' | t }}</span>
+				{%- for article in predictive_search.resources.articles -%}
+					<a class="search-item {% unless article.image %} article {% endunless %}" href="{{ article.url }}" title="{{ article.title }}" tabindex="-1">
+						{%- if article.image -%}
+							<div class="thumbnail" >
+								<img
+									src="{{ article.image | img_url: '110x110_crop_center' }}"
+									srcset="{{ article.image | img_url: '110x110_crop_center' }} 110w, {{ article.image | img_url: '220x220_crop_center' }} 220w"
+									sizes="110px"
+                	alt="{{ article.image.alt }}"
+                	loading="lazy"
+                	width="110" height="110" 
+                />
+	            </div>
+            {%- endif -%}
+						<div class="content">
+							<span class="item-title"><span class="underline-animation">{{ article.title }}</span></span>
+							<span class="caption"><span class="text-size--smaller">{{ article.published_at | date: date_format }}</span></span>
+						</div>
+					</a>
+				{%- endfor -%}
+			{%- endif -%}
+
+			{%- if settings.predictive_search_include_pages and predictive_search.resources.pages.size > 0 -%}
+				<span class="sidebar-divider">{{ 'general.search.page_results_title' | t }}</span>
+				{%- for page in predictive_search.resources.pages -%}
+					<a class="search-item article" href="{{ page.url }}" tabindex="-1">
+						<div class="content">
+							<span class="item-title"><span class="underline-animation">{{ page.title }}</span></span>
+              <span class="caption"><span class="text-size--smaller">
+                {{ page.content | strip_html | truncatewords: 18 }}
+              </span></span>
+						</div>
+					</a>
+				{%- endfor -%}
+			{%- endif -%}
+
+		</div>
+
+	</div>
+  <div class="sidebar__search-link">
+  	<a tabindex="-1" class="button button--solid" href="{{ routes.search_url }}?q={{ predictive_search.terms }}&type=product{% if settings.predictive_search_include_pages %},page{% endif %}{% if settings.predictive_search_include_articles %},article{% endif %}&options[prefix]=last">
+  		<span class="button-scroll-in">{{ 'general.search.search_for_html' | t: terms: predictive_search.terms }}</span>
+  	</a>
+  </div>
+
+{%- endif -%}

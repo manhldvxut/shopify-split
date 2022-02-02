@@ -1,0 +1,33 @@
+<div class="site-box-container container--fullscreen">
+  <div {% unless section.settings.no_padding %} 
+    style="padding: var(--box-smaller-padding)"
+  {% endunless %}>
+    {{ section.settings.custom_liquid }}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.custom-liquid.name",
+  "class": "custom-app-section",
+  "tag": "section",
+  "settings": [ 
+    {
+      "type": "liquid",
+      "id": "custom_liquid",
+      "label": "t:sections.custom-liquid.settings.custom_liquid.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "no_padding",
+      "label": "t:sections.split-extra-words.sections.apps.settings.padding",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.custom-liquid.presets.name"
+    }
+  ]
+}
+{% endschema %}

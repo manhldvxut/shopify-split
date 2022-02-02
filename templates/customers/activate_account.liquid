@@ -1,0 +1,57 @@
+<div class="shopify-section">
+
+  <div id="section-activate" class="site-box-container container--fullscreen box--can-stick">
+
+    <div class="site-box box--big lap--box--small-fl-auto box--typo-big box--lots-of-text box--top-align box--column-flow box__heading box--add-hr" data-order="0">
+      <div class="reduce-top-margin">
+        <div class="site-box-content">
+          <h1 class="title h1">{{ 'customer.activate_account.title' | t }}</h1>
+          {%- if settings.headings_hr -%} <hr /> {%- endif -%}
+        </div>
+      </div>
+    </div>
+
+    <div class="site-box box--big lap--box--bigger box--top-align box--column-flow box__text" data-order="1">
+
+      <div class="site-box-content reduce-top-margin">
+
+        <div class="simple-grid">
+
+          {% form 'activate_customer_password' %}
+
+            <div class="grid__item one-whole">{%- render 'form-errors', form: form -%}</div>
+
+            <p class="grid__item one-whole caption">{{ 'customer.activate_account.subtext' | t }}</p>
+          
+            <div class="grid__item one-whole">
+              <label for="CustomerPassword" class="hidden-label">{{ 'customer.activate_account.password' | t }}</label>
+              <input type="password" value="" name="customer[password]" id="CustomerPassword" class="input-full" placeholder="{{ 'customer.activate_account.password' | t }}">
+            </div>
+
+            <div class="grid__item one-whole">
+              <label for="CustomerPasswordConfirmation" class="hidden-label">{{ 'customer.activate_account.password_confirm' | t }}</label>
+              <input type="password" value="" name="customer[password_confirmation]" id="CustomerPasswordConfirmation" class="input-full" placeholder="{{ 'customer.activate_account.password_confirm' | t }}">
+            </div>
+
+            <div class="grid__item one-whole">
+              <div class="buttons-holder">
+                <button type="submit" class="button button--solid">
+                  <span class="button-scroll-in">{{ 'customer.activate_account.submit' | t }}</span>
+                </button>
+                <button type="submit" class="button button--outline" name="decline">
+                  <span class="button-scroll-in">{{ 'customer.activate_account.cancel' | t }}</span>
+                </button>
+              </div>
+            </div>
+
+          {% endform %}
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

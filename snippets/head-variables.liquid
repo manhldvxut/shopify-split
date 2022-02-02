@@ -1,0 +1,162 @@
+{%- assign headings_font = settings.headings_font -%}
+{%- assign body_font = settings.body_font -%}
+
+{%- unless headings_font.system? -%}
+  <link rel="preload" href="{{ headings_font | font_url }}" as="font" type="font/woff2" crossorigin>
+{%- endunless -%}
+
+{%- unless body_font.system? -%}
+  <link rel="preload" href="{{ body_font | font_url }}" as="font" type="font/woff2" crossorigin>
+{%- endunless -%}
+
+<style type="text/css">
+
+  {%- comment -%} Borders & alt backgrounds values {%- endcomment -%}
+  {%- liquid
+    assign borders_opacity = 0.08
+    assign backgrounds_opacity = 0.18
+    assign hover_opacity = 0.82
+  -%}
+  
+  {%- comment -%} Main color scheme {% endcomment %}
+  {%- liquid
+
+    assign main_text = settings.main_text
+    assign main_background = settings.main_background
+    assign main_background_gradient = main_background | color_modify: 'alpha', 0
+
+    assign main_text_brightness = main_text | color_brightness
+    if main_text_brightness > 150 
+      assign main_text_foreground = '#000' 
+    else 
+      assign main_text_foreground = '#fff' 
+    endif 
+
+    assign main_hover = main_text | color_modify: 'alpha', hover_opacity
+    assign main_borders = main_text | color_modify: 'alpha', borders_opacity
+
+  -%}
+
+  {%- comment -%} Header & sidebars color scheme {% endcomment %}
+  {%- liquid
+
+    assign header_text = settings.header_text
+    assign header_background = settings.header_background
+
+    assign header_text_brightness = header_text | color_brightness
+    if header_text_brightness > 150 
+      assign header_text_foreground = '#000' 
+    else 
+      assign header_text_foreground = '#fff' 
+    endif 
+
+    assign header_borders = header_text | color_modify: 'alpha', borders_opacity
+
+  -%}
+
+  {%- comment -%} Footer color scheme {% endcomment %}
+  {%- liquid
+
+    assign footer_text = settings.footer_text
+    assign footer_background = settings.footer_background
+
+    assign footer_text_brightness = footer_text | color_brightness
+    if footer_text_brightness > 150 
+      assign footer_text_foreground = '#000' 
+    else 
+      assign footer_text_foreground = '#fff' 
+    endif 
+
+    assign footer_borders = footer_text | color_modify: 'alpha', borders_opacity
+
+  -%}
+
+  {%- comment -%} Fonts {% endcomment %}
+  {%- liquid 
+
+    echo headings_font | font_face: font_display: 'swap'
+
+    echo body_font | font_face: font_display: 'swap'
+    assign body_font_bold = body_font | font_modify: 'weight', '+100' 
+
+    if body_font_bold == blank 
+      assign body_font_bold = body_font | font_modify: 'weight', '700' 
+    endif 
+    echo body_font_bold | font_face: font_display: 'swap' 
+
+    assign body_font_italic = body_font | font_modify: 'style', 'italic'
+    if body_font_italic
+      echo body_font_italic | font_face: font_display: 'swap'
+    endif
+
+  -%}
+
+</style>
+<style type="text/css">
+
+  :root {
+
+    /* Main color scheme */
+
+    --main-text: {{ main_text }};
+    --main-text-hover: {{ main_hover }};
+    --main-text-foreground: {{ main_text_foreground }};
+    
+    --main-background: {{ main_background }};
+    --main-background-gradient: {{ main_background_gradient }};
+    --main-background-secondary: {{ main_text | color_modify: 'alpha', backgrounds_opacity }};
+    --main-background-third: {{ main_text | color_modify: 'alpha', 0.03 }};
+    --main-borders: {{ main_borders }};
+
+    /* Header & sidebars color scheme */
+    
+    --header-text: {{ header_text }};
+    --header-text-foreground: {{ header_text_foreground }};
+    
+    --header-background: {{ header_background }};
+    --header-background-secondary: {{ header_text | color_modify: 'alpha', backgrounds_opacity }};
+    --header-borders: {{ header_borders }};
+
+    /* Footer color scheme */
+
+    --footer-text: {{ footer_text }};
+    --footer-text-foreground: {{ footer_text_foreground }};
+    
+    --footer-background: {{ footer_background }};
+    --footer-background-secondary: {{ footer_text | color_modify: 'alpha', backgrounds_opacity }};
+    --footer-borders: {{ footer_borders }};
+
+    /* Buttons radius */
+
+    --buttons-radius: {{ settings.buttons_radius }}px;
+
+    /* Font variables */
+
+    --font-stack-headings: {{ headings_font.family }}, {{ headings_font.fallback_families }};
+    --font-weight-headings: {{ headings_font.weight }};
+    --font-style-headings: {{ headings_font.style }};
+
+    --font-stack-body: {{ body_font.family }}, {{ body_font.fallback_families }};
+    --font-weight-body: {{ body_font.weight }};
+    {%- if body_font_bold -%}
+      --font-weight-body-bold: {{ body_font_bold.weight }}; 
+    {%- else -%}
+      --font-weight-body-bold: 700;
+    {%- endif -%}
+    --font-style-body: {{ body_font.style }};
+
+    --base-headings-size: {{ settings.headings_size }};
+    --base-headings-line: {{ settings.headings_line }};
+    --base-body-size: {{ settings.body_size }};
+    --base-body-line: {{ settings.body_line }};
+
+  }
+
+  select, .regular-select-cover {
+    background-image: url("data:image/svg+xml,%0A%3Csvg width='14' height='9' viewBox='0 0 14 9' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8.42815 7.47604L7.01394 8.89025L0.528658 2.40497L1.94287 0.990753L8.42815 7.47604Z' fill='{{ main_text | color_to_rgb }}'/%3E%3Cpath d='M6.98591 8.89025L5.5717 7.47604L12.057 0.990755L13.4712 2.40497L6.98591 8.89025Z' fill='{{ main_text | color_to_rgb }}'/%3E%3C/svg%3E%0A");
+  }
+  sidebar-drawer .facets__disclosure:after, sidebar-drawer select {
+    background-image: url("data:image/svg+xml,%0A%3Csvg width='14' height='9' viewBox='0 0 14 9' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8.42815 7.47604L7.01394 8.89025L0.528658 2.40497L1.94287 0.990753L8.42815 7.47604Z' fill='{{ header_text | color_to_rgb }}'/%3E%3Cpath d='M6.98591 8.89025L5.5717 7.47604L12.057 0.990755L13.4712 2.40497L6.98591 8.89025Z' fill='{{ header_text | color_to_rgb }}'/%3E%3C/svg%3E%0A");
+  }
+
+</style>

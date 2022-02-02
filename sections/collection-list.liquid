@@ -1,0 +1,136 @@
+{%- render 'custom-colors', id: section.id, background: section.settings.custom_background, text: section.settings.custom_text -%}
+
+<div id="section-{{ section.id }}" class="site-box-container container--fullscreen box--can-stick">
+
+  <div class="site-box box--big lap--box--small-fl-auto box--typo-big box--center-align box--top-align-if-first box--column-flow box__heading" data-order="0">
+    <div class="site-box-content reduce-top-margin-if-first">
+      <div>
+        <h2 class="title h1">
+          {{ section.settings.title | escape }}
+        </h2>
+        {%- if settings.headings_hr -%} <hr /> {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  <div class="site-box box--big lap--box--bigger box--center-align box--column-flow box--no-padding box__collections remove-first-border" data-order="1" style="border:none">
+    {%- liquid 
+      for block in section.blocks
+        render 'collection-item', collection: block.settings.collection, block: block, id: block.id, size: section.blocks.size, text_alignment: section.settings.text_alignment, custom_overlay: section.settings.bg_overlay, index: forloop.index
+      endfor
+    -%}
+  </div>
+
+</div>
+
+
+{% schema %}
+  {
+    "name": "t:sections.collection-list.name",
+    "class": "margins-quirk-if-first",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "t:sections.split-extra-words.settings_schema.headings.title",
+        "default": "Collection list"
+      },
+      {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "t:sections.image-with-text.settings.text_alignment.label",
+        "options": [
+          {
+            "value": "horizontal-left vertical-top",
+            "label": "t:sections.image-with-text.settings.text_alignment.options__1.label"
+          },
+          {
+            "value": "horizontal-center vertical-top",
+            "label": "t:sections.image-with-text.settings.text_alignment.options__2.label"
+          },
+          {
+            "value": "horizontal-right vertical-top",
+            "label": "t:sections.image-with-text.settings.text_alignment.options__3.label"
+          },
+          {
+            "value": "horizontal-left vertical-middle",
+            "label": "t:sections.image-with-text.settings.text_alignment.options__4.label"
+          },
+          {
+            "value": "horizontal-center vertical-middle",
+            "label": "t:sections.image-with-text.settings.text_alignment.options__5.label"
+          },
+          {
+            "value": "horizontal-right vertical-middle",
+            "label": "t:sections.image-with-text.settings.text_alignment.options__6.label"
+          },
+          {
+            "value": "horizontal-left vertical-bottom",
+            "label": "t:sections.image-with-text.settings.text_alignment.options__7.label"
+          },
+          {
+            "value": "horizontal-center vertical-bottom",
+            "label": "t:sections.image-with-text.settings.text_alignment.options__8.label"
+          },
+          {
+            "value": "horizontal-right vertical-bottom",
+            "label": "t:sections.image-with-text.settings.text_alignment.options__9.label"
+          }
+        ],
+        "default": "horizontal-left vertical-bottom"
+      },
+      {
+        "type": "header",
+        "content": "t:sections.split-extra-words.settings_schema.colors.headings.custom_colors"
+      },
+      {
+        "type": "color",
+        "id": "custom_background",
+        "label": "t:sections.split-extra-words.settings_schema.colors.settings.background",
+        "default": "rgba(0,0,0,0)"
+      },
+      {
+        "type": "color",
+        "id": "custom_text",
+        "label": "t:sections.split-extra-words.settings_schema.colors.settings.text",
+        "default": "rgba(0,0,0,0)"
+      },
+      {
+        "type": "checkbox",
+        "id": "bg_overlay",
+        "label": "t:sections.split-extra-words.sections.rich-text.overlay",
+        "default": false
+      }
+    ],
+    "blocks": [
+       {
+        "type": "collection",
+        "name": "t:sections.main-list-collections.blocks.collection.name",
+        "settings": [
+          {
+            "type": "collection",
+            "id": "collection",
+            "label": "t:sections.main-list-collections.blocks.collection.settings.collection.label"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "t:sections.main-list-collections.blocks.collection.settings.image.label",
+            "info": "t:sections.main-list-collections.blocks.collection.settings.image.info"
+          }
+        ]
+      }
+    ],
+    "presets": [{
+      "name": "t:sections.collection-list.presets.name",
+      "blocks": [
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        }
+      ]
+    }]
+  }
+{% endschema %}

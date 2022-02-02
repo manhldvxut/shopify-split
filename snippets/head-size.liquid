@@ -1,0 +1,69 @@
+{% comment %}
+  We are using static CSS variables in order to make sure that we have a responsive header
+    which works well with the VH units that our theme is using.
+  So if you wish to modify the desk/mobile padding for the header, the values are below ( 20 / 14 ) 
+  The same for the maximum height of the logo, currently set at ( 80 / 40 ).
+{% endcomment %}
+{%- liquid 
+  assign deskPadding = 20
+  assign mobilePadding = 15
+  if logo 
+    assign maxDeskHeight = logo_height
+    assign maxMobileHeight = logo_height
+    if maxDeskHeight > logo.height
+      assign maxDeskHeight = logo.height
+    endif
+    if maxMobileHeight > logo.height
+      assign maxMobileHeight = logo.height
+    endif
+    if maxMobileHeight > 30 or maxMobileHeight < 30
+      assign maxMobileHeight = 30
+    endif
+    if maxDeskHeight < 40
+      assign maxDeskHeight = 40
+    endif
+  else
+    assign maxDeskHeight = 40
+    assign maxMobileHeight = 30
+  endif
+-%}
+<div id="header-size-settings" data-max_desk_height="{{ maxDeskHeight }}" data-max_mobile_height="{{ maxMobileHeight }}"></div>
+<style>
+  /* Default (static) values */
+  {%- if logo -%}
+    :root {
+      --header-logo: {{ maxDeskHeight }}px;
+      --header-size: {{ maxDeskHeight | plus: 40 }}px;
+    }
+    @media screen and (max-width: 480px){
+      :root {
+        --header-logo: {{ maxMobileHeight }}px;
+        --header-size: {{ maxMobileHeight | plus: 30 }}px !important;
+      }
+    }
+  {%  endif -%}
+</style>
+<script type="text/javascript">
+  const fixVhByVars = function(){
+    const maxDeskHeight = parseInt( document.getElementById('header-size-settings').dataset.max_desk_height ),
+          maxMobileHeight = parseInt( document.getElementById('header-size-settings').dataset.max_mobile_height );
+
+    const addMoreToWindow = 
+      ( document.querySelector('announcement-bar') && document.querySelector('announcement-bar').style.display != "none" ? document.querySelector('announcement-bar').offsetHeight : 0 ) +
+      ( document.querySelector('nav.breadcrumb') ? document.querySelector('nav.breadcrumb').offsetHeight : 0 );
+    if ( window.innerWidth < 480 ) {
+      document.documentElement.style.setProperty('--header-padding', `{{ mobilePadding }}px`);
+      document.documentElement.style.setProperty('--header-logo', `${maxMobileHeight}px`);
+      document.documentElement.style.setProperty('--header-size', `${parseInt( maxMobileHeight + ( {{ mobilePadding }} * 2 ) )}px`);
+      document.documentElement.style.setProperty('--window-height', `${parseInt( 1 + document.documentElement.clientHeight - maxMobileHeight - ( {{ mobilePadding }} * 2 ) ) - addMoreToWindow}px`);
+    } else {
+      document.documentElement.style.setProperty('--header-padding', `{{ deskPadding }}px`);
+      document.documentElement.style.setProperty('--header-logo', `${maxDeskHeight}px`);
+      document.documentElement.style.setProperty('--header-size', `${parseInt( maxDeskHeight + ( {{ deskPadding }} * 2 ) )}px`);
+      document.documentElement.style.setProperty('--window-height', `${parseInt( 1 + document.documentElement.clientHeight - maxDeskHeight - ( {{ deskPadding }} * 2 ) ) - addMoreToWindow}px`);
+    }
+  } 
+  window.addEventListener('resize', debounce(fixVhByVars, 200));
+  window.addEventListener('DOMContentLoaded', fixVhByVars);
+  fixVhByVars();
+</script>

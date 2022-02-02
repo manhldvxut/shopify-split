@@ -1,0 +1,140 @@
+{%- render 'custom-colors', id: section.id, background: section.settings.custom_background, text: section.settings.custom_text -%}
+
+<div id="section-{{ section.id }}" class="site-box-container container--fullscreen box--can-stick">
+
+  <div class="site-box box--big lap--box--small-fl-auto box__heading box--typo-big box--center-align box--top-align-if-first box--column-flow" data-order="0">
+    <div class="reduce-top-margin-if-first">
+      <div class="site-box-content">
+        <div class="content">
+          {%- unless section.settings.title == blank -%}
+            <h2 class="title h1">{{ section.settings.title | escape }}</h2>
+          {%- endunless -%}
+          {%- if settings.headings_hr -%} <hr /> {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="site-box box--big lap--box--bigger box__text box--typo-big box--center-align box--top-align-if-first box--column-flow" data-order="1">
+
+    <div class="site-box-content reduce-top-margin-if-first">
+      <div>
+
+        {%- for block in section.blocks -%}
+
+           <toggle-tab class="toggle" {{ block.shopify_attributes }}>
+            <span 
+              tabindex="0" aria-expanded="false" aria-controls="toggle-{{ block.id }}"
+              class="toggle__title body-text-lg {% if forloop.first and section.settings.open_first %} opened {% endif %}"
+            >
+              {{ block.settings.title | escape }}
+            </span>
+            <div id="toggle-{{ block.id }}" class="toggle__content" 
+              {% if forloop.first and section.settings.open_first %} style="display: block;" {% endif %}
+            >
+              {%- liquid
+                echo block.settings.body
+                unless block.settings.image == blank
+                  assign sizes = 'sizes="(max-width: 948px) calc(100vw - 20px), (min-width: 949px) and (max-width: 1023px) calc(100vw - 200px), 25vw"'
+                  render 'lazy-image', image: block.settings.image, type: 'image', alt: block.settings.title, sizes: sizes
+                endunless
+              -%}
+            </div>
+          </toggle-tab>
+
+        {%- endfor -%}
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+{% schema %}
+	{
+    "name": "t:sections.faq.name",
+    "class": "mount-toggles margins-quirk-if-first",
+    "tag": "section",
+		"settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "t:sections.split-extra-words.settings_schema.headings.title",
+        "default": "Frequently asked questions"
+      },
+			{
+				"type": "checkbox",
+				"id": "open_first",
+				"label": "t:sections.faq.settings.open_first.label"
+			},
+      {
+        "type": "header",
+        "content": "t:sections.split-extra-words.settings_schema.colors.headings.custom_colors"
+      },
+      {
+        "type": "color",
+        "id": "custom_background",
+        "label": "t:sections.split-extra-words.settings_schema.colors.settings.background",
+        "default": "rgba(0,0,0,0)"
+      },
+      {
+        "type": "color",
+        "id": "custom_text",
+        "label": "t:sections.split-extra-words.settings_schema.colors.settings.text",
+        "default": "rgba(0,0,0,0)"
+      }
+		],
+		"blocks": [
+      {
+        "type": "text",
+        "name": "t:sections.faq.blocks.text.name",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.faq.blocks.text.settings.title.label",
+            "default": "Question title"
+          },
+          {
+            "type": "richtext",
+            "id": "body",
+            "label": "t:sections.faq.blocks.text.settings.text.label",
+            "default": "<p>Write a complete answer to the most frequent questions that your customers might have, such as important product information, shipping policies, payment issues or returns.</p>"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "t:sections.faq.blocks.text.settings.image.label"
+          }
+        ]
+      }
+    ],
+    "presets": [{
+      "name": "t:sections.faq.presets.name",
+      "blocks": [
+        {
+          "type": "text",
+          "settings": {
+            "title": "Shipping details",
+            "body": "<p>Write some useful information about your shipping details<\/p><p>Link to your <a href='#'>shipping policy</a>.<\/p>"
+          }
+        },
+        {
+          "type": "text",  
+          "settings": {
+            "title": "Delivery details",
+            "body": "<p>Let your customers know if you offer free delivery for certain types of orders<\/p><p>Link to your <a href='#'>offers page</a>.<\/p>"
+          }
+        },
+        {
+          "type": "text",  
+          "settings": {
+            "title": "Returns details",
+            "body": "<p>Show customers how much time they have for testing your products<\/p><p>Link to your <a href='#'>returns policy</a>.<\/p>"
+          }
+        }
+      ]
+    }]
+  }
+{% endschema %}

@@ -1,0 +1,39 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-contact-page",
+      "blocks": {
+        "1628539090bcf511f6-": {
+          "type": "title",
+          "settings": {}
+        },
+        "1628539090bcf511f6-0": {
+          "type": "email",
+          "settings": {}
+        },
+        "1628539090bcf511f6-1": {
+          "type": "field",
+          "settings": {
+            "label": "Message",
+            "type": "textarea",
+            "required": true
+          }
+        },
+        "1628539090bcf511f6-2": {
+          "type": "button",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "1628539090bcf511f6-",
+        "1628539090bcf511f6-0",
+        "1628539090bcf511f6-1",
+        "1628539090bcf511f6-2"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

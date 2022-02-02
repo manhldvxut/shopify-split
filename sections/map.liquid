@@ -1,0 +1,136 @@
+{%- liquid
+
+  assign display_map = false
+  assign onboarding = false
+  assign bg_image = section.settings.bg_img
+
+  if section.settings.map_api == blank and bg_image == blank
+    assign onboarding = true
+  endif
+  if section.settings.map_api != blank and section.settings.map_address
+    assign display_map = true
+  endif
+
+-%}
+
+<div class="site-box-container container--fullscreen">
+
+  <div class="site-box box--bigger box--typo-big box--center-align box--column-flow box__heading box__map fix-me-with-height">
+  
+    {%- if display_map -%}
+
+			<contact-map class="contact-map-holder" 
+        data-key="{{ section.settings.map_api | escape }}" aria-hidden="true"
+      >
+        <div class="contact-map-object" 
+          id="contact-map-{{ section.id }}"
+          data-address="{{ section.settings.map_address | escape }}" 
+          data-marker="{% if section.settings.map_marker %}{{ section.settings.map_marker | img_url: '240x' }}{% else %}{% if section.settings.map_style == 'light' %}{{ 'img_marker-dark.png' | asset_url }}{% else %}{{ 'img_marker-light.png' | asset_url }}{% endif %}{% endif %}" 
+          data-style="{{ section.settings.map_style }}" data-zoom="16"
+        ></div>
+
+        <div class="contact-map-address-holder hide" data-aria="hidden">
+          <div class="contact-map-address" style="padding:6px">
+            <p class="text-size--larger" style="margin-bottom:.5em">{{ section.settings.map_address | escape }}</p>
+            <a target="_blank" style="border-bottom:1px solid">{{ 'contact.map.google_maps_link' | t }}</a>
+          </div>
+        </div>
+
+      </contact-map>
+
+    {%- else -%}
+
+      <span class="site-box-background" aria-hidden="true">
+        {%- if onboarding -%}
+          <span class="onboarding-svg">{{ 'lifestyle-1' | placeholder_svg_tag }}</span>
+        {%- else -%}
+          {%- render 'lazy-image', image: bg_image, id: section.id, sizes: '(max-width: 1024px) and (orientation: portrait) max(100vw, 60vh), (max-width: 768px) max(100vw, 60vh), max(50vw, 100vh)' -%}
+        {%- endif -%}
+      </span> 
+
+    {%- endif -%}
+
+    <div class="map-info">
+
+      {%- unless section.settings.title == blank -%}
+        <h4 class="title h4">{{ section.settings.title | escape }}</h4>
+      {%- endunless -%}
+
+      {%- unless section.settings.content == blank -%}
+        <div class="rte">{{ section.settings.content }}</div>
+      {%- endunless -%}
+
+    </div>
+
+  </div>
+  
+</div>
+
+{% schema %}
+  {
+    "name": "t:sections.split-extra-words.sections.map.name",
+    "class": "mount-map",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "t:sections.split-extra-words.settings_schema.headings.title",
+        "default": "Our store"
+      },
+      {
+        "type": "richtext",
+        "id": "content",
+        "label": "t:sections.split-extra-words.sections.map.settings.address_label",
+        "default": "<p>123 Fake St.<br>Vancouver, Canada</p><p>Mon - Fri, 10am - 9pm<br>Saturday, 11am - 4pm<br>Sunday, CLOSED</p>"
+      },
+      {
+        "type": "header",
+        "content": "t:sections.split-extra-words.sections.map.name"
+      },
+      {
+        "type": "text",
+        "id": "map_address",
+        "label": "t:sections.split-extra-words.sections.map.settings.map.address",
+        "default": "Vancouver, Canada"
+      },
+      {
+        "type": "text",
+        "id": "map_api",
+        "label": "t:sections.split-extra-words.sections.map.settings.map.api.label",
+        "info": "t:sections.split-extra-words.sections.map.settings.map.api.info"
+      },
+      {
+        "type": "image_picker",
+        "id": "bg_img",
+        "label": "t:sections.split-extra-words.sections.map.settings.map.image.label",
+        "info": "t:sections.split-extra-words.sections.map.settings.map.image.info"
+      },
+      {
+        "type": "radio",
+        "id": "map_style",
+        "label": "t:sections.split-extra-words.sections.map.settings.map.style.label",
+        "options": [
+          {
+            "value": "light",
+            "label": "t:sections.split-extra-words.sections.map.settings.map.style.options__1"
+          },
+          {
+            "value": "dark",
+            "label": "t:sections.split-extra-words.sections.map.settings.map.style.options__2"
+          }
+        ],
+        "default": "light"
+      },
+      {
+        "type": "image_picker",
+        "id": "map_marker",
+        "label": "t:sections.split-extra-words.sections.map.settings.map.marker.label",
+        "info": "t:sections.split-extra-words.sections.map.settings.map.marker.info"
+      }
+    ],
+    "presets": [{
+      "name": "Map",
+      "category": "Store information"
+    }]
+  }
+{% endschema %}

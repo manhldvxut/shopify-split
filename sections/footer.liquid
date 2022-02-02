@@ -1,0 +1,241 @@
+{%- render 'custom-colors', id: section.id, background: section.settings.custom_background, text: section.settings.custom_text -%}
+
+<div id="section-{{ section.id }}" class="site-footer site-box-container">
+
+  <div class="footer-container">
+
+    {%- if section.blocks.size > 0 -%}
+
+      <div class="footer-top" data-size="{{ section.blocks.size }}">
+
+        {%- for block in section.blocks -%}
+
+          <div class="footer-item" data-type="{{ block.type }}" {{ block.shopify_attributes }}>
+
+            {%- if block.settings.title -%}
+              <h4 class="title h6">{{ block.settings.title | escape }}</h4>
+            {%- endif -%}
+
+            {%- case block.type -%}
+
+              {%- when 'text' -%}
+                <div class="footer-content rte {{ block.settings.size }}">
+                  {{ block.settings.content }}
+                </div>
+
+              {%- when 'menu' -%}
+                <nav class="footer-menu text-size--smaller">
+                  {%- for link in linklists[block.settings.menu].links -%}
+                    <span>
+                      <a href="{{ link.url | escape }}"><span class="underline-animation">{{ link.title | escape }}</span></a>
+                    </span>
+                  {%- endfor -%}
+                </nav>
+
+              {%- when 'social' -%}
+                <nav class="text-size--smaller">
+                  {%- render 'social-icons', type: 'footer' -%}
+                </nav>
+
+              {%- when 'image' -%}
+                <div class="footer-image">
+                  {%- if block.settings.image -%}
+                    {%- render 'lazy-image', image: block.settings.image, sizes: 'sizes="25vw"' -%}
+                  {%- else -%}
+                    <span>{{ 'image' | placeholder_svg_tag }}</span>
+                  {%- endif -%}
+                </div>
+
+            {%- endcase -%}
+
+          </div>
+
+        {%- endfor -%}
+
+      </div>
+
+    {%- endif -%}
+
+    <div class="footer-bottom">
+
+      {%- if section.settings.custom_text != "rgba(0,0,0,0)" -%}
+        <style>
+          {%- assign main_text = section.settings.custom_text -%}
+          .site-footer .regular-select-cover {
+            background-image: url("data:image/svg+xml,%0A%3Csvg width='14' height='9' viewBox='0 0 14 9' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8.42815 7.47604L7.01394 8.89025L0.528658 2.40497L1.94287 0.990753L8.42815 7.47604Z' fill='{{ main_text | color_to_rgb }}'/%3E%3Cpath d='M6.98591 8.89025L5.5717 7.47604L12.057 0.990755L13.4712 2.40497L6.98591 8.89025Z' fill='{{ main_text | color_to_rgb }}'/%3E%3C/svg%3E%0A");
+          }
+        </style>
+      {%- endif -%}
+
+      {%- liquid 
+
+        if section.settings.show_currency_selector and shop.enabled_currencies.size > 1
+          assign currency_selector = true
+        endif
+
+        if section.settings.show_locale_selector and shop.published_locales.size > 1
+          assign locale_selector = true
+        endif 
+
+        if currency_selector or locale_selector
+          render 'localization-form', currency_selector: currency_selector, locale_selector: locale_selector
+        endif
+
+      -%}
+
+      <div class="footer-copyright">
+        {%- if section.settings.show_payment_icons and shop.enabled_payment_types != empty -%}
+          <div class="site-payment" aria-label="{{ 'general.payment_methods' | t }}">
+            {%- for type in shop.enabled_payment_types -%}
+              {{ type | payment_type_svg_tag: class: 'payment-icon' }}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+        <span class="site-copyright text-size--smaller">
+          <span class="copyright-text">{{ 'general.copyright' | t }} &copy; {{ 'now' | date: "%Y" }} <a href="{{ routes.root_url }}">{{ shop.name | escape }}</a><span class="powered-by-shopify">. {{ powered_by_link }}</span></span>
+        </span>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+{% schema %}
+  {
+    "name": "t:sections.footer.name",
+    "max_blocks": 4,
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_payment_icons",
+        "label": "t:sections.footer.settings.show_payment_icons.label",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "t:sections.footer.settings.language_selector.content",
+        "info": "t:sections.footer.settings.language_selector.info"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_locale_selector",
+        "label": "t:sections.footer.settings.language_selector_show.label",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "t:sections.footer.settings.currency_selector.content",
+        "info": "t:sections.footer.settings.currency_selector.info"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_currency_selector",
+        "label": "t:sections.footer.settings.currency_selector_show.label",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "t:sections.split-extra-words.settings_schema.colors.headings.custom_colors"
+      },
+      {
+        "type": "color",
+        "id": "custom_background",
+        "label": "t:sections.split-extra-words.settings_schema.colors.settings.background",
+        "default": "rgba(0,0,0,0)"
+      },
+      {
+        "type": "color",
+        "id": "custom_text",
+        "label": "t:sections.split-extra-words.settings_schema.colors.settings.text",
+        "default": "rgba(0,0,0,0)"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "text",
+        "name": "t:sections.footer.blocks.text.name",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.footer.blocks.text.settings.title.label",
+            "default": "Contact information"
+          },
+          {
+            "type": "richtext",
+            "id": "content",
+            "label": "t:sections.footer.blocks.text.settings.content.label",
+            "default": "<p>Write a short statement about your brand.</p>"
+          },
+          {
+            "type": "select",
+            "id": "size",
+            "label": "t:sections.footer.blocks.text.settings.text_size.label",
+            "options": [
+              {
+                "value": "",
+                "label": "t:sections.footer.blocks.text.settings.text_size.options__1.label"
+              },
+              {
+                "value": "text-size--large",
+                "label": "t:sections.footer.blocks.text.settings.text_size.options__2.label"
+              }
+            ],
+            "default": "text-size--large"
+          }
+        ]
+      },
+      {
+        "type": "menu",
+        "name": "t:sections.split-extra-words.sections.footer.blocks.menu.name",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.footer.blocks.text.settings.title.label",
+            "default": "Quick links"
+          },
+          {
+            "type": "link_list",
+            "id": "menu",
+            "label": "t:sections.split-extra-words.sections.footer.blocks.menu.label",
+            "default": "footer",
+            "info": "t:sections.footer.blocks.menus.settings.menu_1.info"
+          }
+        ]
+      },
+      {
+        "type": "social",
+        "name": "t:sections.footer.blocks.social.name",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.footer.blocks.text.settings.title.label",
+            "default": "Follow us"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "name": "t:sections.footer.blocks.image.name",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.footer.blocks.text.settings.title.label",
+            "default": "Trust badge"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "t:sections.footer.blocks.image.settings.image.label"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

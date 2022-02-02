@@ -1,0 +1,491 @@
+<!-- announcement bar -->
+
+{%- if section.settings.bar_enable -%}
+
+  {%- if section.settings.bar_home_only == false or template == 'index' and section.settings.bar_home_only -%}
+
+    <announcement-bar class="box__banner style--bar" style="position:absolute;display:none">
+
+      {%- if section.settings.bar_link != blank -%}
+        <a href="{{ section.settings.bar_link }}">
+      {%- endif -%}
+
+        <div class="content {% if section.settings.bar_show_dismiss %} with-dismiss {% endif %}">
+          {{ section.settings.bar_content | escape }}
+        </div>
+
+      {%- if section.settings.bar_link != blank -%}
+        </a>
+      {%- endif -%}
+
+      <style>
+        announcement-bar {
+          background-color: {{ section.settings.bar_bgcolor }};
+          color: {{ section.settings.bar_txtcolor }} !important;
+        }
+        announcement-bar a {
+          color: {{ section.settings.bar_txtcolor }} !important;
+        }
+        announcement-bar svg * {
+          fill: {{ section.settings.bar_txtcolor }};
+        }
+      </style>
+
+      {%- if section.settings.bar_show_dismiss -%}
+        <span class="announcement__exit">
+          <span class="visually-hidden">{{ 'general.navigation.close' | t }}</span>
+          <span aria-hidden="true" class="exit">{%- render 'theme-symbols', icon: 'close_icon' -%}</span>
+        </span>
+      {%- endif -%}
+
+    </announcement-bar>
+
+  {%- endif -%}
+
+{%- endif -%}
+
+<main-header id="site-header" class="site-header desktop-view--{{ section.settings.menu_style }} header-scroll" data-logo_height="{{ section.settings.logo_height }}">
+
+  <!-- logo -->
+  
+  {%- if template == 'index' -%}
+    <h1 class="logo">
+  {%- else -%}
+    <span class="logo">
+  {%- endif -%}
+    {%- if section.settings.logo_src -%}
+      <a class="logo-img" href="{{ routes.root_url }}" style="height:var(--header-logo);display:flex;align-items:center">
+        <img src="{{ section.settings.logo_src | img_url: 'master' }}" alt="{{ shop.name | escape }}" style="max-height:{{ section.settings.logo_height }}px" width="{{ section.settings.logo_src.width }}" height="{{ section.settings.logo_src.height }}" />
+      </a>
+    {%- else -%}
+      <a class="logo-txt" href="{{ routes.root_url }}">{{ shop.name | escape }}</a>
+    {%- endif -%}
+  {%- if template == 'index' -%}
+    </h1>
+  {%- else -%}
+    </span>
+  {%- endif -%}
+
+  {%- render 'head-size', logo: section.settings.logo_src, logo_height: section.settings.logo_height -%}
+
+  <!-- menu -->
+
+  <div id="site-nav--desktop" class="site-nav style--classic">
+
+    {%- if section.settings.show_promotion_block -%}
+      {%- capture promotion_block -%}
+        <div class="clearfix"><div class="menu-promotion site-box" id="menu-promotion">
+
+          <div>
+
+            <span class="menu-promotion-title">{{ section.settings.promotion_header | escape }}</span>
+            <div class="rte">{{ section.settings.promotion_content }}</div>
+            {%- if section.settings.promotion_button_label != blank -%}
+              <a class="button" href="{{ section.settings.promotion_button_link | escape }}">
+                <span class="button-scroll-in">{{ section.settings.promotion_button_label | escape }}</span>
+              </a>
+            {%- endif -%}
+
+            {%- unless section.settings.promotion_image == blank -%}
+              <div class="site-box-background with-image">
+                {%- assign image = section.settings.promotion_image -%}
+                <img
+                  src="{{ image | img_url: '240x' }}" alt="{{ image.alt | escape }}"
+                  srcset="{{ image | img_url: '240x' }} 180w, {{ image | img_url: '360x' }} 300w, {{ image | img_url: '600x' }} 480w, {{ image | img_url: '860x' }} 720w"
+                  sizes="380px"
+                  width="{{ image.width }}" height="{{ image.height }}"
+                  loading="lazy" 
+                />
+              </div>
+            {%- endunless -%}
+
+          </div>
+
+          <style type="text/css">
+            {%- liquid
+              assign color_text_brightness = section.settings.promotion_color_txt | color_brightness
+              if color_text_brightness > 150
+                assign color_text_foreground = '#000'
+              else
+                assign color_text_foreground = '#fff'
+              endif
+            -%}
+            #menu-promotion > div {
+              color: {{ section.settings.promotion_color_txt }};
+            }
+            #menu-promotion a {
+              color: {{ section.settings.promotion_color_txt }};
+            }
+            #menu-promotion .button {
+              color: {{ color_text_foreground }} !important;
+              background: {{ section.settings.promotion_color_txt }} !important;
+            }
+            {%- if section.settings.promotion_image == blank -%}
+              #menu-promotion > div {
+                background: {{ section.settings.promotion_color_bg }};
+              }
+            {%- else -%}
+              #menu-promotion .site-box-background.with-image:after {
+                background: {{ section.settings.promotion_color_bg }};
+              }
+            {%- endif -%}
+          </style>
+
+        </div></div>
+      {%- endcapture -%}
+    {%- endif -%}
+
+    {%- if section.settings.menu_style == 'classic' -%}
+      <div class="site-nav-container portable--hide">
+        <nav class="primary-menu">
+          {%- render 'site-nav', linklist: section.settings.main_linklist, collection_linklist: section.settings.collection_linklist, show_collection_images: section.settings.show_collection_image, promotion_block: promotion_block, type: 'classic' -%}
+        </nav>
+      </div>
+    {%- else -%}
+      <noscript>
+        <div class="site-nav-container portable--hide">
+          <nav class="primary-menu">
+            {%- render 'site-nav', linklist: section.settings.main_linklist, collection_linklist: section.settings.collection_linklist, show_collection_images: section.settings.show_collection_image, promotion_block: promotion_block, type: 'classic' -%}
+          </nav>
+        </div>
+      </noscript>
+    {%- endif -%}
+
+    <span 
+      class="site-search-handle site-menu-handle" 
+      title="{{ 'general.navigation.open_search' | t }}"
+      {% if settings.predictive_search_enabled and template != 'search' %} 
+        id="site-search-handle" aria-expanded="false" aria-controls="site-search" 
+      {% endif %} 
+    >
+      <span class="visually-hidden">{{ 'general.navigation.open_search' | t }}</span>
+      <a href="{{ routes.search_url }}" title="{{ 'general.navigation.open_search' | t }}<">
+        <span class="search-menu" aria-hidden="true">
+          {%- render 'theme-symbols', icon: 'search' -%}
+        </span>
+      </a>
+    </span>
+
+    <span 
+      class="site-cart-handle site-menu-handle {{ settings.cart_action }}"
+      title="{{ 'general.navigation.open_cart' | t }}"
+      {% if settings.cart_action == 'overlay' %} 
+        id="site-cart-handle" aria-expanded="false" aria-controls="site-cart" 
+      {% endif %}
+    >
+      <span class="visually-hidden">{{ 'general.navigation.open_cart' | t }}</span>
+      <a href="{{ routes.cart_url }}" title="{{ 'general.navigation.open_cart' | t }}">
+        <span class="cart-menu" aria-hidden="true">
+          {%- render 'theme-symbols', icon: 'cart' -%}
+          <span class="count-holder"><span class="count" data-header-cart-count>{{ cart.item_count }}</span></span>
+        </span>
+      </a>
+    </span>
+
+    <button id="site-menu-handle" class="site-menu-handle site-burger-handle hide portable--show" aria-expanded="false" aria-controls="site-nav--mobile" title="{{ 'general.navigation.open_menu' | t }}">
+      <span class="visually-hidden">{{ 'general.navigation.open_menu' | t }}</span>
+      <span class="hamburger-menu" aria-hidden="true" style="height:16px">{%- render 'theme-symbols', icon: 'burger' -%}</span>
+    </button>
+
+  </div>
+
+  {%- if section.settings.bar_enable -%}
+    {%- if section.settings.bar_home_only == false or template == 'index' and section.settings.bar_home_only -%}
+    <script type="text/javascript">
+      var ad = localStorage.getItem('announcement-dismissed');
+      if ( ad != 'true' ) {
+        document.querySelector('.box__banner').style.display = 'block';
+        document.querySelector('.site-header').style.marginTop = '34px';
+        document.querySelector('body').classList.add('show-announcement-bar');
+        fixVhByVars();
+      }
+    </script>
+    {%- endif -%}
+  {%- endif -%}
+
+</main-header>
+
+<sidebar-drawer id="site-nav--mobile" class="site-nav style--sidebar" tabindex="-1" role="dialog" aria-modal="true">
+  
+  <button class="site-close-handle" title="{{ 'general.navigation.close_sidebar' | t }}">
+    <span class="visually-hidden">{{ 'general.navigation.close_sidebar' | t }}</span>
+    <span class="hamburger-menu" aria-hidden="true">{%- render 'theme-symbols', icon: 'close' -%}</span>
+  </button>
+
+  <div id="site-navigation" class="site-nav-container">
+
+    <div class="site-nav-container-last">
+
+      <p class="title sidebar-title add-hr-below">{{ 'sidebar.menu' | t }}</p>
+
+      <div class="top">
+
+        <nav class="primary-menu">{%- render 'site-nav', linklist: section.settings.main_linklist, collection_linklist: section.settings.collection_linklist, show_collection_images: false, type: 'sidebar' -%}</nav>
+
+      </div>
+
+      <div class="to-bottom-content">
+
+        {%- liquid
+          if promotion_block
+            echo promotion_block
+          endif
+        -%}
+
+        {%- render 'social-icons', size: 'regular' -%}
+
+        <div class="site-copyright text-size--smallest">
+          <span class="copyright-text">{{ 'general.copyright' | t }} &copy; {{ 'now' | date: "%Y" }} <a href="{{ routes.root_url }}">{{ shop.name | escape }}</a></span>
+          <span class="powered-by-shopify" style="display:block">{{ powered_by_link }}</span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</sidebar-drawer>
+
+{%- if settings.show_breadcrumb -%}
+  {%- if template.name contains 'product' or template.name contains 'collection' or template.name contains 'search' -%}
+      
+    <nav class="breadcrumb text-size--smaller" role="navigation" aria-label="breadcrumbs">
+
+      <span class="breadcrumb__link"><a href="{{ routes.root_url }}">{{ 'general.breadcrumb.homepage' | t}}</a></span>
+
+      {%- if template contains 'search' -%}
+
+        <span class="breadcrumb__separator">/</span>
+        <span class="breadcrumb__current">{{ 'general.breadcrumb.search' | t: terms: search.terms }}</span>
+
+      {%- else -%}
+      
+        {%- unless template contains 'product' -%}
+          <span class="breadcrumb__separator">/</span>
+          {%- if template contains 'collections' -%}
+            <span class="breadcrumb__current">{{ 'general.breadcrumb.collections' | t }}</span>
+          {%- elsif collection -%}
+            <span class="breadcrumb__link"><a href="{{ routes.collections_url }}">{{ 'general.breadcrumb.collections' | t }}</a></span>
+          {%- endif -%}
+        {%- endunless -%}
+
+        {%- if collection -%}
+
+          <span class="breadcrumb__separator">/</span>
+          {%- if template contains 'collection' -%}
+            <span class="breadcrumb__current">{{ collection.title | escape }}</span>
+          {%- else -%}
+            <span class="breadcrumb__link">
+              {%- liquid
+                if collection.handle
+                  capture url
+                    echo routes.collections_url 
+                      echo '/'
+                    echo collection.handle
+                  endcapture
+                  echo collection.title | link_to: url
+                endif
+              -%}
+            </span>
+          {%- endif -%}
+          
+        {%- elsif product -%}
+
+          <span class="breadcrumb__separator">/</span>
+          <span class="breadcrumb__link"><a href="{{ routes.collections_url }}">{{ 'general.breadcrumb.collections' | t }}</a></span>
+
+        {%- elsif blog or article -%}
+
+          <span class="breadcrumb__link"><a href="{{ blog.url }}">{{ 'general.breadcrumb.blog' | t }}</a></span>
+
+          {%- if article -%}
+            <span class="breadcrumb__separator">/</span>
+            <span class="breadcrumb__current">{{ article.title | escape }}</span>
+          {%- endif -%}
+
+        {%- elsif template contains 'customers' -%}
+
+          <span class="breadcrumb__current">{{ 'general.breadcrumb.account' | t }}</span>
+
+        {%- elsif template contains 'cart' -%}
+
+          <span class="breadcrumb__current">{{ 'general.breadcrumb.cart' | t }}</span>
+
+        {%- else -%}  
+
+          <span class="breadcrumb__current">{{ page.title | escape }}</span>
+
+        {%- endif -%}
+
+        {%- if product -%}
+
+          <span class="breadcrumb__separator">/</span>
+          <span class="breadcrumb__current">{{ product.title | escape }}</span>
+
+        {%- endif -%}
+
+      {%- endif -%}
+
+    </nav>
+
+    <script>fixVhByVars();</script>
+
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+  {
+    "name": "t:sections.split-extra-words.sections.header.name",
+    "class": "mount-header",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo_src",
+        "label": "t:sections.sidebar.settings.image.label"
+      },
+      {
+        "type": "range",
+        "id": "logo_height",
+        "label": "t:sections.split-extra-words.sections.header.settings.logo_height",
+        "unit": "px",
+        "min": 20,
+        "max": 140,
+        "step": 2,
+        "default": 40
+      },
+      {
+        "type": "link_list",
+        "id": "main_linklist",
+        "label": "t:sections.split-extra-words.sections.header.settings.menu",
+        "default": "main-menu"
+      },
+      {
+        "type": "select",
+        "id": "menu_style",
+        "label": "t:sections.split-extra-words.sections.header.settings.menu_style.label",
+        "options": [
+          {
+            "value": "classic",
+            "label": "t:sections.split-extra-words.sections.header.settings.menu_style.options__1"
+          },
+          {
+            "value": "minimal",
+            "label": "t:sections.split-extra-words.sections.header.settings.menu_style.options__2"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "t:sections.split-extra-words.sections.header.settings.collections_menu.header",
+        "info": "t:sections.split-extra-words.sections.header.settings.collections_menu.info"
+      },
+      {
+        "type": "link_list",
+        "id": "collection_linklist",
+        "label": "t:sections.split-extra-words.sections.header.settings.menu"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_collection_image",
+        "label": "t:sections.split-extra-words.sections.header.settings.collections_menu.settings.show_images.label",
+        "default": true,
+        "info": "t:sections.split-extra-words.sections.header.settings.collections_menu.settings.show_images.info"
+      },
+      {
+        "type": "header",
+        "content": "t:sections.split-extra-words.sections.header.settings.promotional_block.name"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_promotion_block",
+        "label": "t:sections.split-extra-words.sections.header.settings.promotional_block.settings.show.label",
+        "default": false,
+        "info": "t:sections.split-extra-words.sections.header.settings.promotional_block.settings.show.info"
+      },
+      {
+        "type": "text",
+        "id": "promotion_header",
+        "label": "t:sections.split-extra-words.sections.header.settings.promotional_block.settings.title.label"
+      },
+      {
+        "type": "richtext",
+        "id": "promotion_content",
+        "label": "t:sections.split-extra-words.sections.header.settings.promotional_block.settings.content.label"
+      },
+      {
+        "type": "text",
+        "id": "promotion_button_label",
+        "label": "t:sections.split-extra-words.sections.header.settings.promotional_block.settings.button.label"
+      },
+      {
+        "type": "url",
+        "id": "promotion_button_link",
+        "label": "t:sections.split-extra-words.sections.header.settings.promotional_block.settings.link.label"
+      },
+      {
+        "type": "color",
+        "id": "promotion_color_txt",
+        "label": "t:sections.split-extra-words.sections.header.settings.promotional_block.settings.txt_color.label",
+        "default": "#000000"
+      },
+      {
+        "type": "color",
+        "id": "promotion_color_bg",
+        "label": "t:sections.split-extra-words.sections.header.settings.promotional_block.settings.bg_color.label",
+        "default": "#f3f3f3"
+      },
+      {
+        "type": "image_picker",
+        "id": "promotion_image",
+        "label": "t:sections.split-extra-words.sections.header.settings.promotional_block.settings.image.label"
+      },
+      {
+        "type": "header",
+        "content": "t:sections.announcement-bar.name"
+      },
+      {
+        "type": "checkbox",
+        "id": "bar_enable",
+        "label": "t:sections.announcement-bar.settings.bar_show.label",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "bar_home_only",
+        "label": "t:sections.announcement-bar.settings.bar_show_on_homepage.label",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "bar_show_dismiss",
+        "label": "t:sections.announcement-bar.settings.bar_show_dismiss.label",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "bar_content",
+        "label": "Content",
+        "label": "t:sections.announcement-bar.settings.bar_message.label",
+        "info": "t:sections.split-extra-words.sections.header.settings.announcement_bar.content.info"
+      },
+      {  
+        "type": "url",
+        "id": "bar_link",
+        "label": "t:sections.announcement-bar.settings.bar_link.label"
+      },
+      {
+        "type": "color",
+        "id": "bar_bgcolor",
+        "label": "t:sections.announcement-bar.settings.bar_bgcolor.label",
+        "default": "#111111"
+      },
+      {
+        "type": "color",
+        "id": "bar_txtcolor",
+        "label": "t:sections.announcement-bar.settings.bar_txtcolor.label",
+        "default": "#ffffff"
+      }
+    ]
+  }
+{% endschema %}

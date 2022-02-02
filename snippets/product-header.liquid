@@ -1,0 +1,104 @@
+{%- if block.settings.show_vendor -%}
+  {%- if product != blank -%}
+    {%- capture vendor -%} {{ product.vendor | link_to_vendor }} {%- endcapture -%}
+    <span class="product-vendor text-size--small">{{ 'product.vendor_html' | t: vendor: vendor }}</span>
+  {%- else -%}
+    <span class="product-vendor text-size--small">{{ 'general.onboarding.vendor_name' | t }}</span>
+  {%- endif -%}
+{%- endif -%}
+
+<h1 class="product-title {% if block.settings.show_badge %} with-badge {% endif %} {% if title_class %} {{ title_class }} {% else %} h2 {% endif %}">
+  {%- liquid
+    if product != blank
+      echo product.title
+    else 
+      echo 'general.onboarding.product_title' | t
+    endif
+  -%}
+</h1>
+
+{%- liquid
+  if block.settings.show_badge
+    render 'product-badge', product: product
+  endif
+-%}
+
+<div class="price-reviews" id="product-price-{{ section.id }}" {{ block.shopify_attributes }}>
+  <div class="price">
+    {%- if product != blank -%}
+      <div>
+        <span class="product-price product__price--original {% unless title_class %} text-size--large {% endunless %}">{{ current_variant.price | money }}</span>
+        <span class="compare-price product__price--compare {% unless title_class %} text-size--larger {% endunless %}">
+          {%- if current_variant.compare_at_price > current_variant.price -%}
+            {{ current_variant.compare_at_price | money }}
+          {%- endif -%}
+        </span>
+      </div>
+      {%- if block.settings.show_reviews and product.metafields.reviews.rating.value != blank -%}
+        <span class="review">
+         <span class="visually-hidden">{{ 'general.accessibility_labels.rating_info' | t: rating_value: product.metafields.reviews.rating.value, rating_max: product.metafields.reviews.rating.value.scale_max }}</span>
+          <span class="rating-text" aria-hidden="true">
+            {{ product.metafields.reviews.rating.value.rating | round: 1 | remove: '.0' }} / {{ product.metafields.reviews.rating.value.scale_max | round: 2 | remove: '.0' }}
+          </span>
+          <span class="rating-icon" aria-hidden="true">
+            <svg width="18" height="17" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 0L11.0206 6.21885H17.5595L12.2694 10.0623L14.2901 16.2812L9 12.4377L3.70993 16.2812L5.73056 10.0623L0.440492 6.21885H6.97937L9 0Z" fill="#262627"/></svg>
+          </span>
+        </span>
+      {%- endif -%}
+    {%- else -%}
+      <div><span class="product-price product__price--original {% unless title_class %} text-size--large {% endunless %}">{{ 2999 | money }}</span>
+    {%- endif -%}
+  </div>
+  <span class="unit-price product__price--unit text-size--smaller">
+    {%- if current_variant.unit_price_measurement -%}
+      {%- liquid
+        echo current_variant.unit_price | money
+        echo '/'
+        if current_variant.unit_price_measurement.reference_value != 1
+          echo current_variant.unit_price_measurement.reference_value
+        endif
+        echo current_variant.unit_price_measurement.reference_unit
+      -%}
+    {%- endif -%}
+  </span>
+</div>  
+
+{%- if block.settings.show_tax_info or block.settings.show_sku or block.settings.show_barcode -%}
+
+  <div class="product-meta">
+
+    {%- if block.settings.show_tax_info -%}
+      {%- if shop.taxes_included or shop.shipping_policy.body != blank -%}
+        <div class="product-policies text-size--smallest" data-product-policies {{ block.shopify_attributes }}>
+          {% if shop.taxes_included %}
+            {{ 'product.include_taxes' | t }}
+          {%- endif -%}
+          {%- if shop.shipping_policy.body != blank -%}
+            {{ 'product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if block.settings.show_sku or block.settings.show_barcode -%}
+      <div class="product__sku-barcode text-size--smallest" {{ block.shopify_attributes }}>
+        {%- if block.settings.show_sku -%}
+          <span class="product__sku">
+            {%- if current_variant.sku != empty -%}
+              {{ 'product.sku' | t }}{{ current_variant.sku | escape }}
+            {%- endif -%}
+          </span>
+        {%- endif -%}
+        {%- if block.settings.show_barcode -%}
+           <span class="product__barcode">
+            {%- if current_variant.barcode != empty -%}
+              {{ 'product.barcode' | t }}{{ current_variant.barcode | escape }}
+            {%- endif -%}
+          </span>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+
+{%- endif -%}

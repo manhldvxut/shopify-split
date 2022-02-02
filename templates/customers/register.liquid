@@ -1,0 +1,69 @@
+<div class="shopify-section">
+
+  <div id="section-register" class="site-box-container container--fullscreen box--can-stick">
+
+    <div class="site-box box--big lap--box--small-fl-auto box--typo-big box--lots-of-text box--top-align box--column-flow box__heading" data-order="0">
+      <div class="reduce-top-margin">
+        <div class="site-box-content">
+          <h1 class="title h1">{{ 'customer.register.title' | t }}</h1>
+          {%- if settings.headings_hr -%} <hr /> {%- endif -%}
+        </div>
+      </div>
+    </div>
+
+    <div class="site-box box--big lap--box--bigger box--top-align box--column-flow box__text" data-order="1">
+
+      <div class="site-box-content reduce-top-margin">
+
+        <div>
+
+          <div class="simple-grid">
+
+            {%- form 'create_customer' -%}
+
+              <div class="grid__item one-whole">{%- render 'form-errors', form: form -%}</div>
+
+              <div class="grid__item one-half">
+                <label for="FirstName" class="hidden-label">{{ 'customer.register.first_name' | t }}</label>
+                <input type="text" name="customer[first_name]" id="FirstName" class="input-full" placeholder="{{ 'customer.register.first_name' | t }}" {% if form.first_name %}value="{{ form.first_name }}"{% endif %} autocapitalize="words" autofocus>
+              </div>
+
+              <div class="grid__item one-half">
+                <label for="LastName" class="hidden-label">{{ 'customer.register.last_name' | t }}</label>
+                <input type="text" name="customer[last_name]" id="LastName" class="input-full" placeholder="{{ 'customer.register.last_name' | t }}" {% if form.last_name %}value="{{ form.last_name }}"{% endif %} autocapitalize="words">
+              </div>
+
+              <div class="grid__item one-whole">
+                <label for="Email" class="hidden-label">{{ 'customer.register.email' | t }}</label>
+                <input type="email" name="customer[email]" id="Email" class="input-full{% if form.errors contains 'email' %} error{% endif %}" placeholder="{{ 'customer.register.email' | t }}" {% if form.email %} value="{{ form.email }}"{% endif %} autocorrect="off" autocapitalize="off">
+              </div>
+
+              <div class="grid__item one-whole">
+                <label for="CreatePassword" class="hidden-label">{{ 'customer.register.password' | t }}</label>
+                <input type="password" name="customer[password]" id="CreatePassword" class="input-full{% if form.errors contains 'password' %} error{% endif %}" placeholder="{{ 'customer.register.password' | t }}">
+              </div>
+
+              <div class="grid__item one-whole">
+                <div class="buttons-holder">
+                  <button type="submit" class="button button--solid">
+                    <span class="button-scroll-in">{{ 'customer.register.submit' | t }}</span>
+                  </button>  
+                  <a href="{{ routes.root_url }}" class="button button--outline" style="text-align:center">
+                    <span class="button-scroll-in">{{ 'customer.register.cancel' | t }}</span>
+                  </a>
+                </div>
+              </div>
+
+            {%- endform -%}
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

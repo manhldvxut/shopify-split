@@ -1,0 +1,27 @@
+<img
+  src="{{ image | img_url: '640x' }}" alt="{{ image.alt | escape }}"
+  srcset="
+    {%- if image.width >= 360 -%}{{ image | img_url: '360x' }} 360w{%- endif -%} 
+    {%- if image.width >= 420 -%},{{ image | img_url: '420x' }} 420w{%- endif -%} 
+    {%- if image.width >= 480 -%},{{ image | img_url: '480x' }} 480w{%- endif -%} 
+    {%- if image.width >= 640 -%},{{ image | img_url: '640x' }} 640w{%- endif -%} 
+    {%- if image.width >= 840 -%},{{ image | img_url: '840x' }} 840w{%- endif -%} 
+    {%- if image.width >= 1080 -%},{{ image | img_url: '1080x' }} 1080w{%- endif -%} 
+    {%- if image.width >= 1280 -%},{{ image | img_url: '1280x' }} 1280w{%- endif -%} 
+    {%- if image.width >= 1540 -%},{{ image | img_url: '1540x' }} 1540w{%- endif -%} 
+    {%- if image.width >= 1860 -%},{{ image | img_url: '1860x' }} 1860w{%- endif -%} 
+    {%- if image.width >= 2100 -%},{{ image | img_url: '2100x' }} 2100w{%- endif -%}
+  " 
+  sizes="{%- if sizes -%} {{ sizes }} {%- else -%} 100vw {%- endif -%}"
+  {% unless preload %} loading="lazy" {% endunless %} class="lazy {{ class }}"
+  {% if id %} id="responsive-background-{{ id }}" {% endif %}
+  data-ratio="{{ image.aspect_ratio }}" 
+  width="{{ image.width }}" height="{{ image.height }}"
+  {% if image_alignment %} style="object-position: {{ image_alignment }}" {% endif %}
+/>
+{%- if id -%}
+  <script>
+    rbi.push(document.getElementById('responsive-background-{{ id }}'));
+    ribSetSize(document.getElementById('responsive-background-{{ id }}'));
+  </script>
+{%- endif -%}

@@ -1,0 +1,1067 @@
+{%- liquid 
+
+	assign show_section = false
+	unless template == blank 
+		if section.settings.show_on_homepage and template == 'index'
+			assign show_section = true
+		elsif section.settings.show_on_product and template contains 'product'
+			assign show_section = true
+		elsif section.settings.show_on_collection and template contains 'collection'
+			assign show_section = true
+		elsif section.settings.show_on_blog and template contains 'blog' or template contains 'article'
+			assign show_section = true
+		elsif section.settings.show_on_regular
+			unless template == 'index' or template contains 'product' or template contains 'collection' or template contains 'blog' or template contains 'article'
+				assign show_section = true
+			endunless
+		endif
+	endunless
+
+-%}
+
+{%- if show_section and section.blocks.size > 0 -%}
+
+	{%- render 'custom-colors', id: section.id, background: section.settings.custom_background, text: section.settings.custom_text -%}
+
+	<div class="text-columns-with-icons site-box-container" id="section-{{ section.id }}">
+
+		<div class="content-section gutter--on text-w-icon text-w-image" data-size="{{ section.blocks.size }}">
+
+			{%- for block in section.blocks -%}
+
+				<div class="text-w-icon__container" {{ block.shopify_attributes }}>
+
+					<div class="text-w-icon__icon">
+						<span>
+							{%- if block.settings.custom_icon != blank -%}
+				        <img src="{{ block.settings.custom_icon | img_url: '128x128', crop: 'center' }}" alt="{{ block.settings.custom_icon.alt }}" width="128" height="128" style="width:64px;height:64px;" loading="lazy" />
+					    {%- else -%}
+								{%- render 'icons-pack', icon: block.settings.select_icon -%}
+							{%- endif -%}
+						</span>
+					</div>
+
+					<div class="text-w-icon__content">
+
+						<h3 class="text-w-icon__title h4">{{ block.settings.title | escape }}</h3>
+						<div class="text-w-icon__rte rte">{{ block.settings.body }}</div>
+            {%- unless block.settings.label == blank -%}
+              <a class="button button--solid button--with-icon {{ block.settings.bg_style }}" href="{{ block.settings.link | escape }}">{{ block.settings.label | escape }} <span class="icon">{% render 'theme-symbols', icon: 'arrow_icon_smallest' %}</span></a>
+            {% endunless %}
+
+					</div>
+
+				</div>
+
+			{%- endfor -%}
+
+		</div>
+
+	</div>
+
+{%- endif -%}
+
+{% schema %}
+  {
+		"name": "t:sections.text-columns-with-icons.name",
+    "max_blocks": 3,
+    "settings": [
+    	{
+				"type": "paragraph",
+				"content": "t:sections.text-columns-with-icons.settings.content.label"
+    	},
+    	{
+				"type": "checkbox",
+				"id": "show_on_homepage",
+				"label": "t:sections.text-columns-with-icons.settings.show_on_homepage.label",
+				"default": true
+    	},
+    	{
+				"type": "checkbox",
+				"id": "show_on_product",
+				"label": "t:sections.text-columns-with-icons.settings.show_on_product.label",
+				"default": true
+    	},
+    	{
+				"type": "checkbox",
+				"id": "show_on_collection",
+				"label": "t:sections.text-columns-with-icons.settings.show_on_collection.label",
+				"default": true
+    	},
+    	{
+				"type": "checkbox",
+				"id": "show_on_blog",
+				"label": "t:sections.text-columns-with-icons.settings.show_on_blog.label",
+				"default": true
+    	},
+    	{
+				"type": "checkbox",
+				"id": "show_on_regular",
+				"label": "t:sections.text-columns-with-icons.settings.show_on_regular.label",
+				"default": true
+    	},
+      {
+        "type": "header",
+        "content": "t:sections.text-columns-with-icons.settings.icons.label"
+      },
+    	{
+				"type": "paragraph",
+				"content": "t:sections.text-columns-with-icons.settings.icons.info"
+    	},
+    	{
+        "type": "header",
+        "content": "t:sections.split-extra-words.settings_schema.colors.headings.custom_colors"
+      },
+      {
+        "type": "color",
+        "id": "custom_background",
+        "label": "t:sections.split-extra-words.settings_schema.colors.settings.background",
+        "default": "rgba(0,0,0,0)"
+      },
+      {
+        "type": "color",
+        "id": "custom_text",
+        "label": "t:sections.split-extra-words.settings_schema.colors.settings.text",
+        "default": "rgba(0,0,0,0)"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "text-icon",
+        "name": "Text with icon",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.text-columns-with-icons.blocks.icon.settings.title.label",
+            "default": "Text with icon"
+          },
+          {
+            "type": "richtext",
+            "id": "body",
+            "label": "t:sections.text-columns-with-icons.blocks.icon.settings.text.label",
+            "default": "<p>Share some useful information about shipping, returns or discounts.</p>"
+          },
+          {
+            "type": "text",
+            "id": "label",
+            "label": "t:sections.rich-text.blocks.button.settings.button_label.label"
+          },
+          {
+            "type": "url",
+            "id": "link",
+            "label": "t:sections.rich-text.blocks.button.settings.button_link.label"
+          },
+          {
+						"type": "select",
+						"id": "select_icon",
+						"label": "t:sections.text-columns-with-icons.blocks.icon.settings.icon.label",
+						"options": [
+							{
+								"value": "archive-box",
+								"label": "Archive box",
+								"group": "Commerce"
+							},
+							{
+								"value": "british-pound",
+								"label": "British pound",
+								"group": "Commerce"
+							},
+							{
+								"value": "british-pound-sign",
+								"label": "British pound sign",
+								"group": "Commerce"
+							},
+							{
+								"value": "checkout-cart",
+								"label": "Checkout cart",
+								"group": "Commerce"
+							},
+							{
+								"value": "coins",
+								"label": "Coins",
+								"group": "Commerce"
+							},
+							{
+								"value": "delivery",
+								"label": "Delivery",
+								"group": "Commerce"
+							},
+							{
+								"value": "delivery-time",
+								"label": "Delivery time",
+								"group": "Commerce"
+							},
+							{
+								"value": "us-dolar",
+								"label": "Dolar",
+								"group": "Commerce"
+							},
+							{
+								"value": "dolar-sign",
+								"label": "Dolar sign",
+								"group": "Commerce"
+							},
+							{
+								"value": "euro",
+								"label": "Euro",
+								"group": "Commerce"
+							},
+							{
+								"value": "euro-sign",
+								"label": "Euro sign",
+								"group": "Commerce"
+							},
+							{
+								"value": "giftbox",
+								"label": "Giftbox",
+								"group": "Commerce"
+							},
+							{
+								"value": "hand-truck",
+								"label": "Hand truck",
+								"group": "Commerce"
+							},
+							{
+								"value": "label",
+								"label": "Label",
+								"group": "Commerce"
+							},
+							{
+								"value": "open-box",
+								"label": "Open box",
+								"group": "Commerce"
+							},
+							{
+								"value": "package-delivered",
+								"label": "Package delivered",
+								"group": "Commerce"
+							},
+							{
+								"value": "paper-bag",
+								"label": "Paper bag",
+								"group": "Commerce"
+							},
+							{
+                "value": "pay-by-card",
+                "label": "Pay by card",
+                "group": "Commerce"
+              },
+							{
+								"value": "purchase-order",
+								"label": "Purchase order",
+								"group": "Commerce"
+							},
+							{
+								"value": "shipping-box",
+								"label": "Shipping box",
+								"group": "Commerce"
+							},
+							{
+								"value": "shipping-truck",
+								"label": "Shipping truck",
+								"group": "Commerce"
+							},
+							{
+								"value": "shopping-trolley",
+								"label": "Shopping trolley",
+								"group": "Commerce"
+							},
+							{
+								"value": "store",
+								"label": "Store",
+								"group": "Commerce"
+							},
+							{
+								"value": "wallet",
+								"label": "Wallet",
+								"group": "Commerce"
+							},
+							{
+								"value": "asian-cuisine",
+								"label": "Asian cuisine",
+								"group": "Food icons"
+							},
+							{
+								"value": "barbecue",
+								"label": "Barbecue",
+								"group": "Food icons"
+							},
+							{
+								"value": "beer-pint",
+								"label": "Beer pint",
+								"group": "Food icons"
+							},
+							{
+								"value": "birthday-cake",
+								"label": "Birthday cake",
+								"group": "Food icons"
+							},
+							{
+								"value": "bread",
+								"label": "Bread",
+								"group": "Food icons"
+							},
+							{
+								"value": "chef-hat",
+								"label": "Chef hat",
+								"group": "Food icons"
+							},
+							{
+								"value": "coffee",
+								"label": "Coffee",
+								"group": "Food icons"
+							},
+							{
+								"value": "coffee-beans",
+								"label": "Coffee beans",
+								"group": "Food icons"
+							},
+							{
+								"value": "cutlery",
+								"label": "Cutlery",
+								"group": "Food icons"
+							},
+							{
+								"value": "dome-plate-cover",
+								"label": "Dome plate cover",
+								"group": "Food icons"
+							},
+							{
+								"value": "donut",
+								"label": "Donut",
+								"group": "Food icons"
+							},
+							{
+								"value": "hot-coffee",
+								"label": "Hot coffee",
+								"group": "Food icons"
+							},
+							{
+								"value": "ice-cream",
+								"label": "Ice-cream",
+								"group": "Food icons"
+							},
+							{
+								"value": "kettle",
+								"label": "Kettle",
+								"group": "Food icons"
+							},
+							{
+								"value": "paper-cup",
+								"label": "Paper cup",
+								"group": "Food icons"
+							},
+							{
+								"value": "pizza-slice",
+								"label": "Pizza slice",
+								"group": "Food icons"
+							},
+							{
+								"value": "soda-glass",
+								"label": "Soda glass",
+								"group": "Food icons"
+							},
+							{
+								"value": "tea-cup",
+								"label": "Tea cup",
+								"group": "Food icons"
+							},
+							{
+								"value": "tropical-cocktail",
+								"label": "Tropical cocktail",
+								"group": "Food icons"
+							},
+							{
+								"value": "wine-glass",
+								"label": "Wine glass",
+								"group": "Food icons"
+							},
+							{
+								"value": "ambulance",
+								"label": "Ambulance",
+								"group": "Health icons"
+							},
+							{
+								"value": "band-aid",
+								"label": "Band-aid",
+								"group": "Health icons"
+							},
+							{
+								"value": "brain",
+								"label": "Brain",
+								"group": "Health icons"
+							},
+							{
+								"value": "caduceus",
+								"label": "Caduceus",
+								"group": "Health icons"
+							},
+							{
+								"value": "diabetes",
+								"label": "Diabetes",
+								"group": "Health icons"
+							},
+							{
+								"value": "emergency-helicopter",
+								"label": "Emergency helicopter",
+								"group": "Health icons"
+							},
+							{
+								"value": "first-aid-kit",
+								"label": "First aid kit",
+								"group": "Health icons"
+							},
+							{
+								"value": "healthcare",
+								"label": "Healthcare",
+								"group": "Health icons"
+							},
+							{
+								"value": "heartbeat",
+								"label": "Heartbeat",
+								"group": "Health icons"
+							},
+							{
+								"value": "herbal-medicine",
+								"label": "Herbal medicine",
+								"group": "Health icons"
+							},
+							{
+								"value": "hospital-sign",
+								"label": "Hospital sign",
+								"group": "Health icons"
+							},
+							{
+								"value": "medical-research",
+								"label": "Medical research",
+								"group": "Health icons"
+							},
+							{
+								"value": "microscope",
+								"label": "Microscope",
+								"group": "Health icons"
+							},
+							{
+								"value": "pill",
+								"label": "Pill",
+								"group": "Health icons"
+							},
+							{
+								"value": "pills",
+								"label": "Pills",
+								"group": "Health icons"
+							},
+							{
+								"value": "scalpel",
+								"label": "Scalpel",
+								"group": "Health icons"	
+							},
+							{
+								"value": "syringe",
+								"label": "Syringe",
+								"group": "Health icons"
+							},
+							{
+								"value": "test-tube",
+								"label": "Test tube",
+								"group": "Health icons"
+							},	
+							{
+								"value": "bleach",
+								"label": "Bleach",
+								"group": "Laundry icons"
+							},
+							{
+								"value": "do-not-iron",
+								"label": "Do not iron",
+								"group": "Laundry icons"
+							},
+							{
+								"value": "do-not-tumble-dry",
+								"label": "Do not tumble dry",
+								"group": "Laundry icons"
+							},
+							{
+								"value": "do-not-wash",
+								"label": "Do not wash",
+								"group": "Laundry icons"
+							},
+							{
+								"value": "dry-clean",
+								"label": "Dry clean",
+								"group": "Laundry icons"
+							},
+							{
+								"value": "dry-flat",
+								"label": "Dry flat",
+								"group": "Laundry icons"
+							},
+							{
+								"value": "hand-wash",
+								"label": "Hand wash",
+								"group": "Laundry icons"
+							},
+							{
+								"value": "iron",
+								"label": "Iron",
+								"group": "Laundry icons"	
+							},
+							{
+								"value": "machine-wash-30-degree",
+								"label": "Machine wash 30 degree",
+								"group": "Laundry icons"
+							},
+							{
+								"value": "machine-wash-40-degree",
+								"label": "Machine wash 40 degree",
+								"group": "Laundry icons"
+							},
+							{
+								"value": "machine-wash-50-degree",
+								"label": "Machine wash 50 degree",
+								"group": "Laundry icons"
+							},
+							{
+								"value": "machine-wash-60-degree",
+								"label": "Machine wash 60 degree",
+								"group": "Laundry icons"	
+							},
+							{
+								"value": "machine-wash-70-degree",
+								"label": "Machine wash 70 degree",
+								"group": "Laundry icons"	
+							},
+							{
+								"value": "machine-wash-95-degree",
+								"label": "Machine wash 95 degree",
+								"group": "Laundry icons"	
+							},
+							{
+								"value": "machine-wash",
+								"label": "Machine wash",
+								"group": "Laundry icons"	
+							},
+							{
+								"value": "machine-wash-delicate",
+								"label": "Machine wash delicate",
+								"group": "Laundry icons"	
+							},
+							{
+								"value": "machine-wash-resistant",
+								"label": "Machine wash resistant",
+								"group": "Laundry icons"	
+							},
+							{
+								"value": "no-bleach-cloth",
+								"label": "No bleach cloth",
+								"group": "Laundry icons"	
+							},
+							{
+								"value": "no-dry-clean-cloth",
+								"label": "No dry clean cloth",
+								"group": "Laundry icons"	
+							},
+							{
+								"value": "tumble-dry",
+								"label": "Tumble dry",
+								"group": "Laundry icons"	
+							},
+							{
+								"value": "camera",
+								"label": "Camera",
+								"group": "Media icons"
+							},
+							{
+								"value": "camera-phone",
+								"label": "Camera phone",
+								"group": "Media icons"
+							},
+							{
+								"value": "image",
+								"label": "Image",
+								"group": "Media icons"
+							},
+							{
+								"value": "image-gallery",
+								"label": "Image gallery",
+								"group": "Media icons"
+							},
+							{
+								"value": "loudspeaker",
+								"label": "Loudspeaker",
+								"group": "Media icons"
+							},
+							{
+								"value": "low-volume",
+								"label": "Low volume",
+								"group": "Media icons"
+							},
+							{
+								"value": "medium-volume",
+								"label": "Medium volume",
+								"group": "Media icons"
+							},
+							{
+								"value": "music",
+								"label": "Music",
+								"group": "Media icons"
+							},
+							{
+								"value": "mute",
+								"label": "Mute",
+								"group": "Media icons"
+							},
+							{
+								"value": "play",
+								"label": "Play",
+								"group": "Media icons"
+							},
+							{
+								"value": "play-movie",
+								"label": "Play movie",
+								"group": "Media icons"
+							},
+							{
+								"value": "silent-mode",
+								"label": "Silet mode",
+								"group": "Media icons"							
+							},
+							{
+								"value": "smartphone-camera",
+								"label": "Smartphone camera",
+								"group": "Media icons"
+							},
+							{
+								"value": "video-camera",
+								"label": "Video camera",
+								"group": "Media icons"
+							},
+							{
+								"value": "vocal-microphone",
+								"label": "Vocal microphone",
+								"group": "Media icons"
+							},
+							{
+								"value": "volume",
+								"label": "Volume",
+								"group": "Media icons"
+							},
+							{
+								"value": "volume-down",
+								"label": "Volume down",
+								"group": "Media icons"
+							},
+							{
+								"value": "volume-up",
+								"label": "Volume up",
+								"group": "Media icons"
+							},
+							{
+								"value": "wireless-headphones",
+								"label": "Wireless headphones",
+								"group": "Media icons"
+							},
+							{
+								"value": "alarm-clock",
+								"label": "Alarm clock",
+								"group": "Miscellaneous icons"		
+							},
+							{
+								"value": "bookshelf",
+								"label": "Bookshelf",
+								"group": "Miscellaneous icons"
+							},
+							{
+								"value": "config",
+								"label": "Config",
+								"group": "Miscellaneous icons"
+							},
+							{
+								"value": "configuration",
+								"label": "Configuration",
+								"group": "Miscellaneous icons"
+							},
+							{
+								"value": "direction-road-sign",
+								"label": "Direction road sign",
+								"group": "Miscellaneous icons"
+							},
+							{
+								"value": "earth-globe",
+								"label": "Earth globe",
+								"group": "Miscellaneous icons"
+							},
+							{
+								"value": "game-controller",
+								"label": "Game controller",
+								"group": "Miscellaneous icons"
+							},
+							{
+								"value": "literature",
+								"label": "Literature",
+								"group": "Miscellaneous icons"
+							},
+							{
+								"value": "map-marker",
+								"label": "Map marker",
+								"group": "Miscellaneous icons"
+							},
+							{
+								"value": "map-marker-2",
+								"label": "Map marker 2",
+								"group": "Miscellaneous icons"
+							},
+							{
+								"value": "mouse",
+								"label": "Mouse",
+								"group": "Miscellaneous icons"
+							},
+							{
+								"value": "news",
+								"label": "News",
+								"group": "Miscellaneous icons"
+							},
+							{
+								"value": "paperwork",
+								"label": "Paperwork",
+								"group": "Miscellaneous icons"
+							},
+							{
+								"value": "pencil",
+								"label": "Pencil",
+								"group": "Miscellaneous icons"
+							},
+							{
+								"value": "pin",
+								"label": "Pin",
+								"group": "Miscellaneous icons"
+							},
+							{
+								"value": "puzzle",
+								"label": "Puzzle",
+								"group": "Miscellaneous icons"
+							},
+							{
+								"value": "real-estate",
+								"label": "Real estate",
+								"group": "Miscellaneous icons"
+							},
+							{
+								"value": "security-shield",
+								"label": "Security shield",
+								"group": "Miscellaneous icons"
+							},
+							{
+								"value": "shield-crossmark",
+								"label": "Shield crossmark",
+								"group": "Miscellaneous icons"
+							},
+							{
+								"value": "sliders",
+								"label": "Sliders",
+								"group": "Miscellaneous icons"
+							},
+							{
+								"value": "time",
+								"label": "Time",
+								"group": "Miscellaneous icons"
+							},
+							{
+								"value": "time-limit",
+								"label": "Time limit",
+								"group": "Miscellaneous icons"
+							},
+							{
+								"value": "call-contact",
+								"label": "Call contact",
+								"group": "Social icons"
+							},
+							{
+								"value": "championship",
+								"label": "Championship",
+								"group": "Social icons"
+							},
+							{
+								"value": "conference",
+								"label": "Conference",
+								"group": "Social icons"
+							},
+							{
+								"value": "crown",
+								"label": "Crown",
+								"group": "Social icons"
+							},
+							{
+								"value": "diploma",
+								"label": "Diploma",
+								"group": "Social icons"
+							},
+							{
+								"value": "dislike-hand",
+								"label": "Dislike hand",
+								"group": "Social icons"
+							},
+							{
+								"value": "flag",
+								"label": "Flag",
+								"group": "Social icons"
+							},
+							{
+								"value": "handshake",
+								"label": "Handshake",
+								"group": "Social icons"
+							},
+							{
+								"value": "heart",
+								"label": "Heart",
+								"group": "Social icons"
+							},
+							{
+								"value": "id-card",
+								"label": "Id card",
+								"group": "Social icons"
+							},
+							{
+								"value": "like",
+								"label": "Like",
+								"group": "Social icons"
+							},
+							{
+								"value": "like-2",
+								"label": "Like-2",
+								"group": "Social icons"
+							},
+							{
+								"value": "like-hand",
+								"label": "Like hand",
+								"group": "Social icons"
+							},
+							{
+								"value": "luxury",
+								"label": "Luxury",
+								"group": "Social icons"	
+							},
+							{
+								"value": "men",
+								"label": "Men",
+								"group": "Social icons"	
+							},
+							{
+								"value": "social",
+								"label": "Social",
+								"group": "Social icons"	
+							},
+							{
+								"value": "star",
+								"label": "Star",
+								"group": "Social icons"	
+							},
+							{
+								"value": "star-medal",
+								"label": "Star medal",
+								"group": "Social icons"	
+							},
+							{
+								"value": "unlike",
+								"label": "Unlike",
+								"group": "Social icons"	
+							},
+							{
+								"value": "women",
+								"label": "Women",
+								"group": "Social icons"	
+							},
+							{
+								"value": "airplane-takeoff",
+								"label": "Airplane takeoff",
+								"group": "Transportation icons"
+							},
+							{
+								"value": "anchor",
+								"label": "Anchor",
+								"group": "Transportation icons"	
+							},
+							{
+								"value": "backpack",
+								"label": "Backpack",
+								"group": "Transportation icons"	
+							},
+							{
+								"value": "bike",
+								"label": "Bike",
+								"group": "Transportation icons"	
+							},
+							{
+								"value": "camp-fire",
+								"label": "Camp fire",
+								"group": "Transportation icons"	
+							},
+							{
+								"value": "escalator up",
+								"label": "Escalator up",
+								"group": "Transportation icons"	
+							},
+							{
+								"value": "gas-station",
+								"label": "Gas-station",
+								"group": "Transportation icons"	
+							},
+							{
+								"value": "gear-knob",
+								"label": "Gear knob",
+								"group": "Transportation icons"	
+							},
+							{
+								"value": "lifebelt",
+								"label": "Lifebelt",
+								"group": "Transportation icons"	
+							},
+							{
+								"value": "lighthouse",
+								"label": "Lighthouse",
+								"group": "Transportation icons"	
+							},
+							{
+								"value": "missile",
+								"label": "Missile",
+								"group": "Transportation icons"	
+							},
+							{
+								"value": "road",
+								"label": "Road",
+								"group": "Transportation icons"	
+							},
+							{
+								"value": "sailing",
+								"label": "Sailing",
+								"group": "Transportation icons"	
+							},
+							{
+								"value": "station-wagon",
+								"label": "Station wagon",
+								"group": "Transportation icons"	
+							},
+							{
+								"value": "trafic-light",
+								"label": "Trafic light",
+								"group": "Transportation icons"	
+							},
+							{
+								"value": "trailer",
+								"label": "Trailer",
+								"group": "Transportation icons"
+							},
+							{
+								"value": "celsius",
+								"label": "Celsius",
+								"group": "Weather icons"
+							},
+							{
+								"value": "cloud",
+								"label": "Cloud",
+								"group": "Weather icons"
+							},
+							{
+								"value": "cloud-lightning",
+								"label": "Cloud lightning",
+								"group": "Weather icons"
+							},
+							{
+								"value": "clouds",
+								"label": "Clouds",
+								"group": "Weather icons"
+							},
+							{
+								"value": "crescent-moon",
+								"label": "Crescent moon",
+								"group": "Weather icons"
+							},
+							{
+								"value": "fahrenheit",
+								"label": "Fahrenheit",
+								"group": "Weather icons"
+							},
+							{
+								"value": "heavy-rain",
+								"label": "Heavy rain",
+								"group": "Weather icons"
+							},
+							{
+								"value": "lightning-drizzle",
+								"label": "Lightning drizzle",
+								"group": "Weather icons"
+							},
+							{
+								"value": "night-cloudy",
+								"label": "Night cloudy",
+								"group": "Weather icons"
+							},
+							{
+								"value": "partly-cloudy",
+								"label": "Partly cloudy",
+								"group": "Weather icons"
+							},
+							{
+								"value": "rain",
+								"label": "Rain",
+								"group": "Weather icons"
+							},
+							{
+								"value": "snowflake",
+								"label": "Snowflake",
+								"group": "Weather icons"
+							},
+							{
+								"value": "snow-flurry",
+								"label": "Snow flurry",
+								"group": "Weather icons"
+							},
+							{
+								"value": "strong-wind",
+								"label": "Strong wind",
+								"group": "Weather icons"
+							},
+							{
+								"value": "sun",
+								"label": "Sun",
+								"group": "Weather icons"
+							},
+							{
+								"value": "umbrella",
+								"label": "Umbrella",
+								"group": "Weather icons"
+							},
+							{
+								"value": "water-droplet",
+								"label": "Water droplet",
+								"group": "Weather icons"
+							},
+							{
+								"value": "wind",
+								"label": "Wind",
+								"group": "Weather icons"
+							},
+							{
+								"value": "windsock",
+								"label": "Windsock",
+								"group": "Weather icons"
+							},
+							{
+								"value": "wind-turbine",
+								"label": "Wind turbine",
+								"group": "Weather icons"
+							}
+						]
+          },
+          {
+            "type": "image_picker",
+            "id": "custom_icon",
+            "label": "t:sections.split-extra-words.sections.footer.custom-icon.label",
+            "info": "t:sections.split-extra-words.sections.footer.custom-icon.info"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

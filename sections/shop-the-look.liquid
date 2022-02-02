@@ -1,0 +1,104 @@
+<div id="section-{{ section.id }}" class="site-box-container container--fullscreen box--can-stick"
+  data-image-position="{{ section.settings.desktop_image_positioning }}"
+>
+
+  <div class="site-box box--big lap--box--small-fl box__heading" data-order="0">
+    <div class="site-box-background">
+      {%- if section.settings.image == blank -%}
+        <span class="onboarding-svg">{{ 'collection-1' | placeholder_svg_tag }}</span>
+      {%- else -%}
+        {%- liquid
+          render 'lazy-image', image: section.settings.image, id: section.id, sizes: '(max-width: 1024px) and (orientation: portrait) max(100vw, 60vh), (max-width: 768px) max(100vw, 60vh), max(50vw, 100vh)'
+          if settings.show_preloader
+            render 'preloader'
+          endif
+        -%}
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div class="site-box box--big lap--box--bigger box__shop-the-look box--center-align box--column-flow" data-order="1">
+    <div class="site-box-content">
+      <css-slider
+        data-options='{
+          "selector": ".box__collection",
+          "navigation": false,
+          "autoHeight": false
+        }'
+        class="content-slider-mobile css-slider--simple-dots"
+        style="display:flex"
+      >
+        {%- for block in section.blocks -%}
+          <div class="box__collection product-holder">
+            {%- liquid 
+              if block.settings.product != blank
+                render 'product-item', product: block.settings.product, slider: true
+              else
+                render 'product-item-blank'
+              endif
+            -%}
+          </div>
+        {%- endfor -%}
+      </css-slider>
+    </div>
+  </div>
+
+</div>
+
+{% schema %}
+  {
+    "name": "t:sections.shop-the-look.name",
+    "class": "mount-css-slider",
+    "max_blocks": 4,
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "t:sections.shop-the-look.settings.image.label"
+      },
+      {
+        "type": "select",
+        "id": "desktop_image_positioning",
+        "label": "t:sections.split-extra-words.sections.rich-text.image_position",
+        "options": [
+          {
+            "value": "image-on-left",
+            "label": "t:sections.split-extra-words.sections.split-screen-slider.settings.desktop_layout.options__1"
+          },
+          {
+            "value": "image-on-right",
+            "label": "t:sections.split-extra-words.sections.split-screen-slider.settings.desktop_layout.options__2"
+          }
+        ],
+        "default": "image-on-left"
+      }
+    ],
+    "blocks": [
+       {
+        "type": "product",
+        "name": "t:sections.shop-the-look.blocks.product.name",
+        "settings": [
+          {
+            "type": "product",
+            "id": "product",
+            "label": "t:sections.shop-the-look.blocks.product.settings.select_product.label"
+          }
+        ]
+      }
+    ],
+    "presets": [{
+      "name": "t:sections.shop-the-look.presets.name",
+      "blocks": [
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        }
+      ]
+    }]
+  }
+{% endschema %}

@@ -1,0 +1,53 @@
+{%- capture date_format -%} {{ 'general.date_format.month_day_year' | t }} {%- endcapture -%}
+<a class="blog-item {% if size == 1 %} blog-item--single {% endif %} site-box-content-to-focus" 
+	href="{{ article.url }}" title="{{ article.title }}"
+	{% unless article.image %} data-has-no-image {% endunless %}
+>
+
+	<div class="blog-item__content">
+
+	  {%- for block in section.blocks -%}
+	    {%- case block.type -%}
+
+	    	{%- when 'title' -%}
+	    		<span class="blog-item__title text-size--large"><span class="underline-animation">{{ article.title }}</span></span>
+
+	    	{%- when 'info' -%}
+	    		<span class="blog-item__info text-size--smaller">
+	    			{%- if block.settings.show_author -%}
+              <span class="blog-item__author">{{ article.author | escape }}</span>
+            {%- endif -%}
+            {%- if block.settings.show_date -%}
+              <span class="blog-item__date">{{ article.published_at | date: date_format }}</span>
+            {%- endif -%}
+          </span>
+
+        {%- when 'summary' -%}
+        	<span class="blog-item__summary">
+        		{%- liquid
+        			if article.image
+        				assign excerpt_length = 15
+        			else 
+        				assign excerpt_length = 30
+        			endif
+        			echo article.excerpt_or_content | strip_html | truncatewords: excerpt_length, '...' | escape
+        		-%}
+          </span>
+
+        {%- endcase -%}
+	  {%- endfor -%}
+
+	</div>
+
+	{%- if article.image -%}
+		<div class="blog-item__image"> 
+      {%- liquid
+      	render 'lazy-image', image: article.image, id: article.id, sizes: '(max-width: 1024px) and (orientation: portrait) max(50vw, 50vh), (max-width: 768px) max(50vw, 50vh), max(25vw, 50vh)'
+        if settings.show_preloader
+          render 'preloader'
+        endif
+      -%}
+		</div>
+	{%- endif -%}
+
+</a>

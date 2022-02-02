@@ -1,0 +1,134 @@
+<a href="{{ product.url }}" class="product-item style--{{ settings.product_animation }} {% if large %} lap--box--small-lg {% endif %} {% if settings.product_show_secondary and product.images.size >= 2 %} with-secondary-image {% endif %}">
+
+  <div class="box--product-image primary">
+
+    {%- liquid
+
+      if settings.thumb_resize == "fill"
+        if large 
+          assign sizes = '(max-width: 768px) 80vw, (max-width: 1024px) and (orientation: portrait) 80vw, max(50vw, 60vh)'
+        elsif slider
+          assign sizes = '(max-width: 768px) 80vw, (max-width: 1024px) and (orientation: portrait) 80vw, max(33vw, 50vh)'
+        else 
+          assign sizes = '(max-width: 768px) max(50vw, 50vh), (max-width: 1024px) and (orientation: portrait) max(50vw, 50vh), max(25vw, 50vh)'
+        endif
+      else
+        if large 
+          assign sizes = '(max-width: 768px) 80vw, (max-width: 1024px) and (orientation: portrait) 80vw, 50vw'
+        elsif slider
+          assign sizes = '(max-width: 768px) 80vw, (max-width: 1024px) and (orientation: portrait) 80vw, 33vw'
+        else 
+          assign sizes = '(max-width: 768px) 50vw, (max-width: 1024px) and (orientation: portrait) 50vw, 25vw'
+        endif
+      endif
+
+      render 'lazy-image', image: product.featured_media, preload: preload, sizes: sizes 
+
+      if settings.show_preloader
+        render 'preloader'
+      endif
+
+    -%}
+
+  </div>
+
+  {%- if settings.product_show_secondary and product.images.size >= 2 -%}
+    <div class="box--product-image secondary">
+      {%- render 'lazy-image', image: product.media[1], sizes: sizes -%}
+    </div>
+  {%- endif -%}
+
+  {%- assign variant = product.selected_or_first_available_variant -%}
+
+  <div class="caption">
+    <div>
+      <span class="title"><span class="underline-animation">{{ product.title }}</span></span>
+      <span class="price text-size--smaller"><span>
+
+        {%- liquid
+
+          assign price = product.price | money
+
+          if product.price_varies
+            if product.compare_at_price > product.price
+              echo 'product.on_sale_from_html' | t: price: price
+            else
+              echo 'product.from_text_html' | t: price: price
+            endif
+          else
+            if product.compare_at_price > product.price
+              echo price
+              echo '<del>'
+                echo product.compare_at_price | money
+              echo '</del>'
+            else 
+              echo price
+            endif
+          endif
+
+          if variant.unit_price_measurement
+            echo '<span class="unit-price text-size--smallest">'
+            echo variant.unit_price | money
+            echo ' / '
+            if variant.unit_price_measurement.reference_value != 1
+              echo variant.unit_price_measurement.reference_value
+            endif
+            echo variant.unit_price_measurement.reference_unit
+            echo '</span>'
+          endif
+
+        -%}
+
+      </span></span>
+
+    </div>
+  </div>
+
+  {%- if settings.reviews_badge_desktop != "no" or settings.reviews_badge_mobile -%}
+    {%- if product.metafields.reviews.rating.value != blank -%}
+      <span class="product-badge left rating text-size--smallest" 
+        data-desktop-display="{{ settings.reviews_badge_desktop }}"data-mobile-display="{{ settings.reviews_badge_mobile }}"
+      >
+        <span class="visually-hidden">{{ 'general.accessibility_labels.rating_info' | t: rating_value: product.metafields.reviews.rating.value, rating_max: product.metafields.reviews.rating.value.scale_max }}</span>
+        <span class="rating-text" aria-hidden="true">
+          {{ product.metafields.reviews.rating.value.rating | round: 1 | remove: '.0' }} <span class="lap--hide"> / {{ product.metafields.reviews.rating.value.scale_max | round: 2 | remove: '.0' }}</span>
+        </span>
+        <span class="rating-icon" aria-hidden="true">
+          {%- render 'theme-symbols', icon: 'star' -%}
+        </span>
+      </span>
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- render 'product-badge', product: product -%}
+
+</a>
+
+{%- if settings.enable_quick_buy and product.available -%}
+  {%- if product.has_only_default_variant -%}
+    <quick-add-to-cart class="quick-add-to-cart">
+      <product-form data-ajax-cart>
+        <div class="quick-add-to-cart-button">
+          {%- form 'product', product -%}
+            <input type="hidden" name="id" value="{{ variant.id }}">
+            <button class="product__add-to-cart" type="submit" name="add" aria-label="{{ 'product.add_to_cart' | t }}" tabindex="-1">
+              <span class="visually-hidden">{{ 'product.add_to_cart' | t }}</span>
+              <span class="add-to-cart__text" style="height:26px" role="img">{%- render 'theme-symbols', icon: 'cart_icon_plus' -%}</span>
+              {%- render 'preloader', class: 'add-to-cart__preloader' -%}
+            </button>
+          {%- endform -%} 
+        </div>
+      </product-form>
+    </quick-add-to-cart>
+  {%- else -%}
+    <quick-view-product class="quick-add-to-cart">
+      <div class="quick-add-to-cart-button">
+        <a class="product__add-to-cart" href="{{ product.url }}" tabindex="-1">
+          <span class="visually-hidden">{{ 'product.add_to_cart' | t }}</span>
+          <span class="add-to-cart__text" style="height:26px" role="img">{%- render 'theme-symbols', icon: 'cart_icon_plus' -%}</span>
+          {%- render 'preloader', class: 'add-to-cart__preloader' -%}
+        </a>
+      </div>
+    </quick-view-product>
+  {%- endif -%}
+{%- endif -%}

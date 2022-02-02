@@ -1,0 +1,72 @@
+{%- liquid 
+  if show_currency_selector and shop.enabled_currencies.size > 1
+    assign currency_selector = true
+  endif
+
+  if show_locale_selector and shop.published_locales.size > 1
+    assign locale_selector = true
+  endif
+-%}
+
+{%- if currency_selector or locale_selector -%}
+
+  <div class="localization-form-holder">
+    
+    {%- assign formId = 'localization_form-' | append: location -%}
+    {%- form 'localization', id: formId, class: 'localization-form' -%}
+
+      {%- if locale_selector -%}
+        <localization-form class="localization-form__item">
+
+          <span class="text-size--smaller" id="lang-heading-{{ location }}">{{ 'general.accessibility_labels.language_dropdown_label' | t }}</span>
+
+          <input type="hidden" name="locale_code" value="{{ form.current_locale.iso_code }}" />
+
+          <button class="regular-select-cover" aria-expanded="false" aria-controls="lang-list-{{ location }}" data-location="{{ location }}">
+            <span class="regular-select-inner">
+              {{ form.current_locale.endonym_name }}
+            </span>
+          </button>
+
+          <ul id="lang-list-{{ location }}" class="regular-select-content invert-permanent">
+            {%- for locale in form.available_locales -%}
+              <li class="regular-select-item {% if locale.iso_code == form.current_locale.iso_code %}regular-select-item--selected{% endif %}">
+                <button type="submit" name="locale_code" lang="{{ locale.iso_code }}" value="{{ locale.iso_code }}" {% if currency.iso_code == form.current_currency.iso_code %}aria-current="true"{% endif %}>{{ locale.endonym_name }}</button>
+              </li>
+            {%- endfor -%}
+          </ul>
+
+        </localization-form>
+      {%- endif -%} 
+
+      {%- if currency_selector -%}
+        <localization-form class="localization-form__item">
+
+          <span class="text-size--smaller" id="currency-heading-{{ location }}">{{ 'general.accessibility_labels.currency_dropdown_label' | t }}</span>
+
+          <input type="hidden" name="currency_code" id="CurrencySelector-{{ location }}" value="{{ form.current_currency.iso_code }}" />
+
+          <button class="regular-select-cover" aria-expanded="false" aria-controls="currency-list-{{ location }}" data-location="{{ location }}">
+            <span class="regular-select-inner">
+              {{ form.current_currency.iso_code }} {%- if form.current_currency.symbol -%}{{ form.current_currency.symbol }}{%- endif -%}
+            </span>
+          </button>
+
+          <ul id="currency-list-{{ location }}" class="regular-select-content invert-permanent">
+            {% for currency in form.available_currencies %}
+              <li class="regular-select-item {% if currency.iso_code == form.current_currency.iso_code %}regular-select-item--selected{% endif %}">
+                <button type="submit" name="currency_code" value="{{ currency.iso_code }}" {% if currency.iso_code == form.current_currency.iso_code %}aria-current="true"{% endif %}>
+                  {{ currency.iso_code }} {%- if currency.symbol -%}{{ currency.symbol }}{%- endif -%}
+                </button>
+              </li>
+            {%- endfor -%}
+          </ul>
+
+        </localization-form>
+      {%- endif -%}
+
+    {%- endform -%}
+
+  </div>
+
+{%- endif -%}

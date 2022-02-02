@@ -1,0 +1,132 @@
+{%- liquid 
+
+  assign products_max = section.settings.collection_rows | times: 4
+  assign products_per_page = section.settings.collection.all_products_count | at_most: products_max
+  assign total_count = products_per_page
+
+  if section.settings.show_view_all 
+    assign total_count = total_count | plus: 1
+  endif
+
+  if section.settings.subtitle != blank or section.settings.title != blank
+    assign total_count = total_count | plus: 1
+  endif
+
+  if total_count > products_max
+    assign total_difference = total_count | minus: products_max 
+    assign products_per_page = products_per_page | minus: total_difference
+    assign total_count = total_count | minus: total_difference
+  endif 
+
+-%}
+
+<div id="section-{{ section.id }}" class="site-box-container container--fullscreen" style="border:none">
+
+  <div class="product-grid-border-fix fix-bottom-border" data-count="{{ total_count | plus: row_extras | modulo: 4 }}">
+
+    {%- if section.settings.subtitle != blank or section.settings.title != blank -%}
+
+      <div class="site-box box--small lap--box--small-lg box--typo-small box--center-align box--column-flow box__heading" data-order="0">
+
+        <div class="site-box-content">
+              
+          {%- if section.settings.title -%}
+            <h2 class="title h3">
+              {{ section.settings.title | escape }}
+            </h2>
+          {%- endif -%}
+
+          {%- if section.settings.subtitle -%}
+            <span class="subtitle">{{ section.settings.subtitle | escape }}</span>
+          {%- endif -%}
+
+        </div>
+
+      </div>
+
+    {%- endif -%}
+
+    {%- if section.settings.collection == blank -%}
+
+      {%- for i in (1..products_per_page) -%}
+        <div class="site-box box--small box--typo-small lap--box--small-lg box--center-align box--no-padding box--column-flow box__collection" data-order="{{ forloop.index }}">
+          <div class="site-box-content">
+            {%- render 'product-item-blank', index: forloop.index -%}
+          </div>
+        </div>
+      {%- endfor -%}
+
+    {%- else -%}
+
+      {%- for product in section.settings.collection.products limit: products_per_page -%}
+        <div class="site-box box--small box--typo-small lap--box--small-lg box--center-align box--no-padding box--column-flow box__collection" data-order="{{ forloop.index }}">
+          <div class="site-box-content product-holder">
+            {%- render 'product-item', product: product, index: forloop.index0 -%}
+          </div>
+        </div>
+      {%- endfor -%}
+
+    {%- endif -%}
+
+    {%- if section.settings.show_view_all -%}
+
+    <div class="site-box box--small box--typo-small lap--box--small-lg box--center-align box--center-align box--column-flow box__heading">
+      <div class="site-box-content">
+        <a href="{{ section.settings.collection.url }}" class="button button--solid button--with-icon">
+          <span>{{ 'collections.general.view_all_products' | t }}</span>
+          <span class="icon" aria-hidden="true" role="img">{%- render 'theme-symbols', icon: 'arrow_icon_smallest' -%}</span>
+        </a>
+      </div>
+    </div>
+
+  {%- endif -%}
+
+  </div> 
+
+</div>
+
+{% schema %}
+  {
+    "name": "t:sections.featured-collection.name",
+    "class": "mount-featured-collection mount-products mount-images",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "t:sections.split-extra-words.settings_schema.headings.title",
+        "default": "Featured collection"
+      },
+      {
+        "type": "text",
+        "id": "subtitle",
+        "label": "t:sections.split-extra-words.settings_schema.headings.subtitle",
+        "default": "Shop now"
+      },
+      {
+        "type": "collection",
+        "id": "collection",
+        "label": "t:sections.featured-collection.settings.collection.label"
+      },
+      {
+        "type": "range",
+        "id": "collection_rows",
+        "label": "t:sections.split-extra-words.sections.main-collection-page.settings.product_grid.products_per_row",
+        "min": 1,
+        "max": 5,
+        "default": 2,
+        "step": 1
+      },
+      {
+        "type": "checkbox",
+        "id": "show_view_all",
+        "label": "t:sections.featured-collection.settings.show_view_all.label",
+        "default": false
+      }
+    ],  
+    "presets": [
+      {
+        "name": "t:sections.featured-collection.name"
+      }
+    ]
+  }
+{% endschema %}

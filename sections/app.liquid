@@ -1,0 +1,35 @@
+<div class="site-box-container container--fullscreen">
+  {%- for block in section.blocks -%}
+    <div {% unless section.settings.no_padding %} 
+      style="padding: var(--box-smaller-padding)"
+    {% endunless %}>
+      {%- render block -%}
+    </div>
+  {%- endfor -%}
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.apps.name",
+  "class": "custom-app-section",
+  "tag": "section",
+  "settings": [ 
+    {
+      "type": "checkbox",
+      "id": "no_padding",
+      "label": "t:sections.split-extra-words.sections.apps.settings.padding",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.apps.presets.name"
+    }
+  ]
+}
+{% endschema %}

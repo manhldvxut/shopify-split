@@ -1,0 +1,25 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-article",
+      "blocks": {
+        "social_sharing": {
+          "type": "social_sharing",
+          "settings": {}
+        },
+        "blog_navigation": {
+          "type": "blog_navigation",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "social_sharing",
+        "blog_navigation"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

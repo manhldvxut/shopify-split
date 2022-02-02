@@ -1,0 +1,101 @@
+<div id="section-{{ section.id }}" class="site-box-container container--fullscreen box--can-stick" style="border:none">
+
+  <div class="site-box box--big lap--box--small-fl-auto box--typo-big box--center-align box--top-align-if-first box--column-flow box__heading" data-order="0">
+    <div class="site-box-content reduce-top-margin-if-first">
+      <div>
+          
+        {%- if section.settings.title -%}
+          <h2 class="title h1">
+            {{ section.settings.title | escape }}
+          </h2>
+        {%- endif -%}
+
+        {%- if section.settings.show_view_all -%}
+          <a href="{{ section.settings.collection.url }}" class="button button--solid button--with-icon">
+            <span>{{ 'collections.general.view_all_products' | t }}</span>
+            <span class="icon" aria-hidden="true" role="img">{%- render 'theme-symbols', icon: 'arrow_icon_smallest' -%}</span>
+          </a>
+        {%- endif -%}
+
+      </div>
+    </div>
+  </div>
+
+  <div class="site-box box--big lap--box--bigger box--typo-big box--center-align box--column-flow box--no-padding box__collection" data-order="1">
+
+    <div>
+
+      <css-slider 
+        data-options='{
+          "selector": ".collection-slider-product-item",
+          "navigation": false,
+          "autoHeight": true,
+          "watchCSS": true
+        }'
+        class="content-slider-mobile css-slider--simple-dots"
+        style="display:block"
+      >
+
+        {%- liquid
+          if section.settings.collection == blank
+            for i in (1..section.settings.products_per_page)
+              echo '<div class="site-box-content collection-slider-product-item product-holder">'
+                render 'product-item-blank', index: forloop.index, large: true
+              echo '</div>'
+            endfor
+          else
+            for product in section.settings.collection.products limit: section.settings.products_per_page
+              echo '<div class="site-box-content collection-slider-product-item product-holder">'
+                render 'product-item', product: product, index: forloop.index0, large: true
+              echo '</div>'
+            endfor
+          endif
+        -%}
+
+      </css-slider>
+
+    </div>
+
+  </div>
+
+</div>
+
+{% schema %}
+  {
+    "name": "t:sections.split-extra-words.sections.collection-slider.name",
+    "class": "mount-collection-slider margins-quirk-if-first",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "t:sections.split-extra-words.settings_schema.headings.title",
+        "default": "Featured collection"
+      },
+      {
+        "type": "collection",
+        "id": "collection",
+        "label": "t:sections.featured-collection.settings.collection.label"
+      },
+      {
+        "type": "range",
+        "id": "products_per_page",
+        "label": "t:sections.featured-collection.settings.products_number.label",
+        "min": 1,
+        "max": 12,
+        "step": 1,
+        "default": 4
+      },
+      {
+        "type": "checkbox",
+        "id": "show_view_all",
+        "label": "t:sections.featured-collection.settings.show_view_all.label",
+        "default": false
+      }
+    ],  
+    "presets": [
+      {
+        "name": "t:sections.split-extra-words.sections.collection-slider.name"
+      }
+    ]
+  }
+{% endschema %}

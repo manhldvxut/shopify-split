@@ -1,0 +1,193 @@
+<modal-box id="modal-{{ section.id }}" class="popup" 
+  data-options='{
+    "show": {{ section.settings.newsletter_auto }},
+    "frequency": "{{ section.settings.newsletter_frequent }}",
+    "enabled": {{ section.settings.popup_enable }}
+  }'
+  style="display:none"
+>
+    
+  <div class="popup-content"
+    {% if section.settings.title == blank and section.settings.content == blank and section.settings.newsletter_enable == false %} data-no-content {% endif %} 
+    {% if section.settings.image == blank %} data-no-image {% endif %}
+    {% if section.settings.image_mobile %} data-show-image-on-mobile {% endif %}
+  >
+
+    {% if section.settings.image %}
+
+      <a class="popup-image" {% unless section.settings.image_link == blank %} href="{{ section.settings.image_link }}" target="_self" {% endunless %} aria-hidden="true">
+        {%- liquid
+          render 'lazy-image', image: section.settings.image, id: 'popup-image', sizes: '480px'
+          if settings.show_preloader
+            render 'preloader'
+          endif
+        -%}
+      </a>
+      
+    {% endif %}
+
+    <div class="popup-text" data-content>
+
+      {%- if section.settings.title != blank -%}
+        <h4 class="popup-title h3">{{ section.settings.title }}</h4>
+      {%- endif -%}
+
+      {%- if section.settings.content != blank -%}
+        <div class="rte">{{ section.settings.content }}</div>
+      {%- endif -%}
+
+      {%- if section.settings.newsletter_enable -%}
+          <div class="newsletter-form" {{ block.shopify_attributes }}>
+          {%- form 'customer', id: 'newsletter-popup', class: 'newsletter-form' -%}
+            {%- render 'form-errors', form: form -%}
+            {%- if form.posted_successfully? -%}
+              <div class="alert alert--success">{{ 'general.newsletter.confirmation' | t }}</div>
+            {%- else -%}
+              <div class="input-group">
+                <input type="email" value="{% if customer %}{{ customer.email }}{% endif %}" placeholder="{{ 'general.newsletter.email_label' | t }}" name="contact[email]" id="Email-{{ section.id }}" aria-label="{{ 'general.newsletter.email_label' | t }}" autocorrect="off" autocapitalize="off" required>
+                <button class="button button--solid" type="submit" name="commit" id="Subscribe-{{ section.id }}">{{ 'general.newsletter.submit' | t }}</button>
+              </div>
+                <input type="hidden" name="contact[tags]" value="newsletter">
+            {%- endif -%}
+          {%- endform -%}
+        </div>
+      {%- endif -%}
+
+    </div>
+
+    <button class="site-close-handle" title="{{ 'general.navigation.close_sidebar' | t }}" data-close>
+      <span class="visually-hidden">{{ 'general.navigation.close_sidebar' | t }}</span>
+      <span class="hamburger-menu" aria-hidden="true">{%- render 'theme-symbols', icon: 'close' -%}</span>
+    </button>
+
+  </div>
+
+  <div class="popup-background" data-close></div>
+
+</modal-box>
+
+<style>
+  {%- if section.settings.popup_txtcolor != 'rgba(0,0,0,0)' -%}
+    {%- liquid
+      assign main_text_brightness = section.settings.popup_txtcolor | color_brightness
+      if main_text_brightness > 150 
+        assign main_text_foreground = '#000' 
+      else 
+        assign main_text_foreground = '#fff' 
+      endif 
+    -%}
+    #modal-{{ section.id }} {
+      --main-text: {{ section.settings.popup_txtcolor }};
+      --main-text-foreground: {{ main_text_foreground }};
+    }
+  {%- endif -%}
+  {%- if section.settings.popup_bgcolor != 'rgba(0,0,0,0)' -%}
+    #modal-{{ section.id }} {
+      --main-background: {{ section.settings.popup_bgcolor }};
+    }
+  {%- endif -%}
+</style>
+
+{% schema %}
+  {
+    "name": "t:sections.popup.name",
+    "class": "mount-popup",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "t:sections.popup.settings.title.label",
+        "default": "Popup"
+      },
+      {
+        "type": "richtext",
+        "id": "content",
+        "label": "t:sections.popup.settings.content.label",
+        "default": "<p>Stay up to date on the latest product releases, special offers & news by signing up for our newsletter.</p><p>Read our <a href='#'>privacy policy</a>.</p>"
+      },
+      {
+        "type": "checkbox",
+        "id": "newsletter_enable",
+        "label": "t:sections.popup.settings.show_newsletter.label",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "t:sections.popup.settings.functionality.content"
+      },
+      {
+        "type": "checkbox",
+        "id": "popup_enable",
+        "label": "t:sections.popup.settings.enable.label",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "newsletter_auto",
+        "label": "t:sections.popup.settings.show_after.label",
+        "min": 5,
+        "max": 60,
+        "step": 5,
+        "unit": "t:sections.popup.settings.show_after.info",
+        "default": 10
+      },
+      {
+        "type": "select",
+        "id": "newsletter_frequent",
+        "label": "t:sections.popup.settings.frequency.label",
+        "options": [
+          {
+            "value": "day",
+            "label": "t:sections.popup.settings.frequency.options__1.label"
+          },
+          {
+            "value": "week",
+            "label": "t:sections.popup.settings.frequency.options__2.label"
+          },
+          {
+            "value": "once",
+            "label": "t:sections.popup.settings.frequency.options__3.label"
+          }
+        ],
+        "default": "week"
+      },
+      {
+        "type": "header",
+        "content": "t:sections.split-extra-words.sections.popup.settings.image.header"
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "t:sections.split-extra-words.sections.popup.settings.image.label",
+        "info": "t:sections.split-extra-words.sections.popup.settings.image.info"
+      },
+      {
+        "type": "url",
+        "id": "image_link",
+        "label": "t:sections.split-extra-words.sections.popup.settings.image.link"
+      },
+      {
+        "type": "checkbox",
+        "id": "image_mobile",
+        "label": "t:sections.split-extra-words.sections.popup.settings.image.show_on_mobile",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "t:settings_schema.colors.name"
+      },
+      {
+        "type": "color",
+        "id": "popup_bgcolor",
+        "label": "t:sections.announcement-bar.settings.bar_bgcolor.label",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "popup_txtcolor",
+        "label": "t:sections.announcement-bar.settings.bar_txtcolor.label",
+        "default": "#000000"
+      }
+    ]
+  }
+{% endschema %}

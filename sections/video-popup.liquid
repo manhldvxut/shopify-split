@@ -1,0 +1,129 @@
+{%- render 'custom-colors', id: section.id, background: section.settings.custom_overlay, text: section.settings.custom_text -%}
+
+<div id="section-{{ section.id }}" class="site-box-container container--fullscreen"> 
+
+  <div class="site-box box--bigger box--typo-bigger lap--box--small-fl box--center-align box--column-flow box__announcement horizontal-center vertical-middle" style="min-height:65vh">
+
+    <div class="site-box-content video-popup__container">
+
+      <video-modal-popup 
+        class="video-popup__link content" href="{{ section.settings.video }}" 
+        data-video-type="{{ section.settings.video.type }}"
+      >
+
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'heading' -%}
+              <h2 class="title h2">{{ block.settings.heading | escape }}</h2>
+            {%- when 'text' -%}
+              <span class="subtitle">{{ block.settings.text | escape }}</span>
+          {%- endcase -%}
+        {%- endfor -%}
+
+        {%- unless section.settings.video == blank -%}
+          <span class="video-popup__play" aria-hidden="true">
+            {%- render 'theme-symbols', icon: 'icon_video_play' -%}
+          </span>
+        {%- endunless -%}
+
+        <template>
+          <div>
+            {%- if section.settings.video.type == 'youtube' -%}
+              <iframe src="https://www.youtube.com/embed/{{ section.settings.video.id }}?enablejsapi=1" class="js-youtube" allow="autoplay; encrypted-media" allowfullscreen title="{{ section.settings.description | escape }}"></iframe>
+            {%- else -%}
+              <iframe src="https://player.vimeo.com/video/{{ section.settings.video.id }}" class="js-vimeo" allow="autoplay; encrypted-media" allowfullscreen title="{{ section.settings.description | escape }}"></iframe>
+            {%- endif -%}
+          </div>
+        </template>
+
+      </video-modal-popup>
+
+    </div>
+
+    <span class="site-box-background {% if section.settings.custom_overlay != "rgba(0,0,0,0)" %} with-image {% endif %}" aria-hidden="true">
+      {%- if section.settings.image == blank -%}
+        <span class="onboarding-svg">{{ 'image' | placeholder_svg_tag }}</span>
+      {%- else -%}
+        {%- render 'lazy-image', image: section.settings.image id: section.id, sizes: '100vw' -%}
+      {%- endif -%}
+      </span> 
+
+  </div>
+
+</div>
+
+{% schema %}
+  {
+    "name": "t:sections.video-popup.name",
+    "blocks": [
+      {
+        "type": "heading",
+        "limit": 1,
+        "name": "t:sections.rich-text.blocks.heading.name",
+        "settings": [
+           {
+            "type": "text",
+            "id": "heading",
+            "label": "t:sections.rich-text.blocks.heading.settings.heading.label",
+            "default": "Talk about your brand"
+          }
+        ]
+      },
+      { 
+        "type": "text",
+        "name": "t:sections.rich-text.blocks.text.name",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "text",
+            "label": "t:sections.rich-text.blocks.text.settings.text.label",
+            "default": "Introduce yourself with a video"
+          }
+        ]
+      },
+      {
+        "type": "line",
+        "name": "t:sections.split-extra-words.sections.heading.settings.line.name",
+        "limit": 1
+      }
+    ],
+    "settings": [
+      {
+        "id": "video",
+        "type": "video_url",
+        "label": "t:sections.video-popup.settings.video.label",
+        "accept": ["youtube", "vimeo"],
+        "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "t:sections.video-popup.settings.image.label"
+      },
+      {
+        "type": "header",
+        "content": "t:sections.split-extra-words.settings_schema.colors.headings.custom_colors"
+      },
+      {
+        "type": "color",
+        "id": "custom_text",
+        "label": "t:sections.split-extra-words.settings_schema.colors.settings.text",
+        "default": "rgba(0,0,0,0)"
+      },
+      {
+        "type": "color",
+        "id": "custom_overlay",
+        "label": "t:sections.split-extra-words.sections.image-with-text.settings.overlay.label",
+        "default": "rgba(0,0,0,0)"
+      }
+    ],
+    "presets": [{
+      "name": "t:sections.video-popup.name",
+      "blocks": [
+        { "type": "text" },
+        { "type": "heading" }
+      ]
+    }]
+  }
+{% endschema %}

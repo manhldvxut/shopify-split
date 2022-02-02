@@ -1,0 +1,70 @@
+{%- if recommendations.performed and recommendations.products_count > 0 -%}
+	<div class="cart-product-recommendations">
+		<span class="sidebar-divider">{{ settings.cart_recommendations_heading }}</span>
+		<css-slider class="css-slider--simple-dots" 
+      data-options='{
+        "selector": ".cart-product-item",
+        "navigation": false,
+        "groupCells": true
+      }'
+      style="display:flex"
+    > 
+		  {%- for product in recommendations.products -%}
+				<div class="cart-product-item">
+
+					<a href="{{ product.url }}" class="cart-product-item-image">
+		        <img 
+		          src="{{ product.featured_media | img_url: '170x170', crop: 'center' }}" alt="{{ product.title | escape }}"
+		          srcset="{{ product.featured_media | img_url: '170x170', crop: 'center' }} 170w, {{ product.featured_media | img_url: '340x340', crop: 'center' }} 340w"
+		          sizes="170px"
+		          loading="lazy" class="lazy"
+		          width="170" height="170"
+		        />
+					</a>
+
+					<a href="{{ product.url }}" class="cart-product-item-title">
+						<span class="underline-animation">{{ product.title }}</span>
+					</a>	
+
+					<span class="cart-product-item-price text-size--smaller">
+		  			{%- liquid
+
+							assign variant = product.selected_or_first_available_variant
+		          assign price = product.price | money
+
+		          if product.price_varies
+		            if product.compare_at_price > product.price
+		              echo 'product.on_sale_from_html' | t: price: price
+		            else
+		              echo 'product.from_text_html' | t: price: price
+		            endif
+		          else
+		            if product.compare_at_price > product.price
+		              echo price
+		              echo '<del>'
+		                echo product.compare_at_price | money
+		              echo '</del>'
+		            else 
+		              echo price
+		            endif
+		          endif
+
+		          if variant.unit_price_measurement
+		            echo '<span class="unit-price text-size--smallest">'
+		            echo variant.unit_price | money
+		            echo ' / '
+		            if variant.unit_price_measurement.reference_value != 1
+		              echo variant.unit_price_measurement.reference_value
+		            endif
+		            echo variant.unit_price_measurement.reference_unit
+		            echo '</span>'
+		          endif
+
+		        -%}
+					</span>
+
+				</div>
+	  	{%- endfor -%}
+	  </css-slider>
+ 	</div>
+{%- endif -%}

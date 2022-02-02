@@ -1,0 +1,103 @@
+<div 
+  id="FeaturedMedia-{{ section.id }}-{{ media.id }}" 
+  class="product-gallery-item {% if gallery_style == 'slider' %} {% endif %}"
+  data-product-media-type="{{ media.media_type }}{% if media.media_type == 'external_video' %}-{{ media.host }}{% endif %}"
+  data-product-single-media-wrapper
+  data-media-id="{{ media.id }}"
+  data-video
+  tabindex="0"
+  data-index="{{ index }}"
+  {%- if media.media_type == 'external_video' -%} 
+    data-video-id="{{ media.external_id }}" 
+    data-video-host="{{ media.host }}"
+  {%- endif -%}
+  {%- if media.media_type == 'image' and enable_zoom -%} data-image-zoom {%- endif -%}
+  {%- if media.media_type == 'image' -%} data-ratio="{{ media.aspect_ratio }}" style="padding-top: {{ 100 | divided_by: media.aspect_ratio }}%" {%- endif -%}
+>
+
+  {%- if media.media_type == 'image' -%}
+
+    {%- liquid
+
+      if index == 0 
+        assign preload = true
+      endif
+      
+      render 'lazy-image', image: media, id: image_id, sizes: '(max-width: 1024px) and (orientation: portrait) 100vw, (max-width: 768px) 100vw, 50vw', preload: preload
+
+      if settings.show_preloader
+        render 'preloader'
+      endif
+
+    -%}
+
+    {%- if enable_zoom -%}
+      <product-image-zoom class="product__image-zoom" data-image="{{ media | img_url: 'master' }}" aria-hidden="true" tabindex="-1">
+        {%- render 'theme-symbols', icon: 'zoom-in' -%}
+      </product-image-zoom>
+    {% endif %}
+
+  {%- else -%}
+
+    <div class="box--product-media" 
+      {% unless media.aspect_ratio > 0 %} 
+        data-ratio="1" style="padding-top: 100%" 
+      {% else %} 
+        data-ratio="{{ media.aspect_ratio }}" 
+        {% if media.media_type contains 'video' %} data-type="video" {% endif %}
+        style="padding-top: {{ 100 | divided_by: media.preview_image.aspect_ratio }}%" 
+      {% endunless %}>
+
+      {%- if media.media_type == "external_video" or media.media_type == "video" -%}
+
+        <video-popup id="video-popup--{{ image_id }}" style="display:block">
+
+          <template>
+            {%- liquid
+              if media.media_type == "external_video" 
+                assign video_class = 'js-' | append: media.host
+                if media.host == 'youtube'
+                  echo media | external_video_url: autoplay: true, loop: loop, playlist: media.external_id | external_video_tag: class: video_class, loading: "lazy"
+                else 
+                  echo media | external_video_url: autoplay: true, loop: loop | external_video_tag: loading: "lazy", class: video_class
+                endif
+              else 
+                echo media | video_tag: autoplay: false, loop: loop, controls: true, preload: "preload"
+              endif
+            -%}
+          </template>
+
+          <div class="video-popup__container">
+
+            <a class="video-popup__link">
+
+              <span class="video-popup__play" aria-hidden="true">
+                {%- render 'theme-symbols', icon: 'play' -%}
+              </span>
+
+              <span class="video-popup__background" aria-hidden="true">
+                {%- render 'lazy-image', image: media.preview_image, id: media.id, sizes: '(max-width: 1024px) and (orientation: portrait) 100vw, (max-width: 768px) 100vw, 50vw', preload: preload -%}
+              </span>
+
+            </a>
+
+          </div>
+
+          <button class="video-popup__close">
+            <span class="visually-hidden">{{ 'general.navigation.close' | t }}</span>
+            <span aria-hidden="true" class="exit">{%- render 'theme-symbols', icon: 'close_icon' -%}</span>
+          </button>
+
+        </video-popup>
+
+      {%- elsif media.media_type == 'model' -%}
+        <product-model>
+          {{ media | media_tag: image_size: "2048x", toggleable: true }}
+        </product-model>
+      {%- endif -%}
+
+    </div>
+  
+  {%- endif -%}
+
+</div>

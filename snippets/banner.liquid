@@ -1,0 +1,116 @@
+{%- liquid
+
+  if product.metafields.promo_banner.link != blank
+    assign banner_link = product.metafields.promo_banner.link
+  else 
+    assign banner_link = section.settings.banner_link
+  endif
+
+  if product.metafields.promo_banner.subtitle != blank
+    assign banner_subtitle = product.metafields.promo_banner.subtitle
+  else 
+    assign banner_subtitle = section.settings.banner_subtitle
+  endif
+
+  if product.metafields.promo_banner.title != blank
+    assign banner_title = product.metafields.promo_banner.title
+  else 
+    assign banner_title = section.settings.banner_title
+  endif
+
+-%}
+
+{%- if banner_title != blank or banner_subtitle != blank or banner_link != blank -%}
+
+  <modal-box id="modal-{{ section.id }}" class="box__banner style--box" 
+    data-options='{
+      "show": 3,
+      "frequency": "day",
+      "enabled": {{ section.settings.banner_enable }}
+    }'
+    style="display:none;"
+  >
+
+  {%- liquid 
+
+    if banner_link
+
+      if banner_link contains 'product'
+
+        assign product = banner_link | remove: 'products' | remove : '/'
+        if all_products[product] != blank
+          capture product_object 
+            echo '<div class="box__collection product-holder">'
+              render 'product-item', product: all_products[product]
+            echo '</div>'
+          endcapture
+        endif
+        if product_object 
+          assign dom = 'div'
+        endif
+
+      elsif banner_link contains 'collection'
+
+        assign collection = banner_link | remove: 'collections' | remove : '/'
+        if collections[collection] != blank
+          capture collection_object
+            echo '<div class="site-box-background" style="background-color:'
+              echo section.settings.bg_color
+            echo '">'
+              render 'lazy-image', image: collections[collection].featured_image, id: 'modal-banner', sizes: '250px'
+            echo '</div>'
+          endcapture
+        endif
+
+      endif 
+
+      if product_object == blank
+        assign dom = 'a'
+        assign href = banner_link | prepend: 'href="' | append: '"'
+      endif
+
+    else 
+      assign dom = 'div'
+    endif
+
+  -%}
+
+  <div class="modal-object" style="
+    background-color: {{ section.settings.bg_color }};
+    {% if product_object == blank %} text-align: center; {% endif %}"
+    {% if collection_object != blank %} data-collection {% elsif product_object != blank %} data-product {% endif %}
+    {% if product_object == blank %} data-link {% endif %}
+    {% if banner_link != blank %} data-has-link {% endif %}
+  >
+
+    <{{ dom }} {{ href }}>
+
+      <div class="content" data-content style="color: {{ section.settings.txt_color }}">
+        {%- if banner_title -%}
+          <span class="title text-size--large">
+            <span class="underline-animation-alternative" style="background-image: linear-gradient(to right, {{ section.settings.txt_color }}, {{ section.settings.txt_color }});">{{ banner_title }}</span>
+          </span>
+        {%- endif -%}
+        {%- if banner_subtitle -%}
+          <span class="subtitle">{{ banner_subtitle }}</span>
+        {%- endif -%}
+      </div>
+
+      {{ product_object }}
+      {{ collection_object }}
+
+    </{{ dom }}>
+
+    <button class="site-close-handle" title="{{ 'general.navigation.close_sidebar' | t }}" data-close>
+      <span class="visually-hidden">{{ 'general.navigation.close_sidebar' | t }}</span>
+      <span class="hamburger-menu" aria-hidden="true">{%- render 'theme-symbols', icon: 'close' -%}</span>
+      <style>
+        #modal-{{ section.id }} .site-close-handle * {
+          fill: {{ section.settings.txt_color }};
+        }
+      </style>
+    </button>
+
+  </div>
+
+{%- endif -%}

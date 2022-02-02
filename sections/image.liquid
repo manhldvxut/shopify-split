@@ -1,0 +1,51 @@
+<div id="section-{{ section.id }}" class="site-box-container container--fullscreen">
+
+  {%- unless section.settings.image == blank -%}
+
+    {%- assign image = section.settings.image -%}
+
+    <div class="box__blank-image" style="padding-top:{{ 100 | divided_by: image.aspect_ratio }}%">
+      <img
+        src="{{ image | img_url: '640x' }}" alt="{{ image.alt | strip_html | escape }}"
+        srcset="{{ image | img_url: '320x' }} 320w, {{ image | img_url: '480x' }} 480w, {{ image | img_url: '640x' }} 640w, {{ image | img_url: '840x' }} 840w, {{ image | img_url: '1080x' }} 1080w, {{ image | img_url: '1280x' }} 1280w, {{ image | img_url: '1540x' }} 1540w, {{ image | img_url: '1860x' }} 1860w, {{ image | img_url: '2100x' }} 2100w"
+        sizes="100vw"
+        width="{{ image.width }}" height="{{ image.height }}"
+        loading="lazy" class="lazy"
+      />
+      {%- liquid
+        if settings.show_preloader
+          render 'preloader'
+        endif
+      -%}
+    </div>
+
+  {%- else -%}
+  
+    <div class="box__blank-image" style="padding-top:100%">
+      <span class="onboarding-svg section--image-text--item__image onboarding-background">
+        {{ 'image' | placeholder_svg_tag }}
+      </span>
+    </div>
+    
+  {%- endunless -%}
+
+</div>
+
+{% schema %}
+  {
+    "name": "t:sections.image.name",
+    "class": "index-section",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "t:sections.image.name"
+      }
+    ], 
+    "presets": [
+      {
+        "name": "t:sections.image.name"
+      }
+    ]
+  }
+{% endschema %}

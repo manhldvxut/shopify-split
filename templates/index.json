@@ -1,0 +1,528 @@
+{
+  "sections": {
+    "16372498804121dda9": {
+      "type": "split-screen-slider",
+      "blocks": {
+        "1637249880c19b891c-2": {
+          "type": "slide",
+          "settings": {
+            "tagline": "Introducing",
+            "title": "Our brand new store",
+            "subtitle": "Showcase your best products",
+            "button_label": "Explore all",
+            "button_link": "",
+            "video": ""
+          }
+        },
+        "1637249880c19b891c-0": {
+          "type": "slide",
+          "settings": {
+            "tagline": "Why not",
+            "title": "Write about yourself",
+            "subtitle": "Include some awesome images",
+            "button_label": "Learn more",
+            "button_link": "shopify:\/\/collections\/new-os2-0",
+            "video": ""
+          }
+        },
+        "1637249880c19b891c-1": {
+          "type": "slide",
+          "settings": {
+            "tagline": "Take the opportunity to",
+            "title": "Promot your products",
+            "subtitle": "Include various promotions and flash sales",
+            "button_label": "Shop now",
+            "button_link": "",
+            "video": ""
+          }
+        }
+      },
+      "block_order": [
+        "1637249880c19b891c-2",
+        "1637249880c19b891c-0",
+        "1637249880c19b891c-1"
+      ],
+      "settings": {
+        "desktop_layout": "split",
+        "desktop_image_positioning": "image-on-left",
+        "desktop_text": "rgba(0,0,0,0)",
+        "desktop_background": "#ebebed",
+        "desktop_overlay": "rgba(0,0,0,0)",
+        "mobile_height": "var(--window-height)",
+        "mobile_text": "#ffffff",
+        "mobile_background": "#000000",
+        "heading_size": "h1"
+      }
+    },
+    "16372293330d0f5bf6": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Bestsellers",
+        "subtitle": "Shop Now",
+        "collection": "",
+        "collection_rows": 3,
+        "show_view_all": true
+      }
+    },
+    "1637571021f6bdff72": {
+      "type": "heading",
+      "blocks": {
+        "1637571020263843ae-0": {
+          "type": "heading",
+          "settings": {
+            "heading": "Talk about your brand",
+            "heading_size": "h2"
+          }
+        },
+        "1637571020263843ae-1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Describe a product, share announcements, or welcome customers to your store.<\/p>"
+          }
+        },
+        "1637571020263843ae-2": {
+          "type": "button",
+          "settings": {
+            "button_label": "LEARN more",
+            "button_link": "shopify:\/\/pages\/about-us"
+          }
+        }
+      },
+      "block_order": [
+        "1637571020263843ae-0",
+        "1637571020263843ae-1",
+        "1637571020263843ae-2"
+      ],
+      "settings": {
+        "text_alignment": "center",
+        "custom_background": "rgba(0,0,0,0)",
+        "custom_text": "rgba(0,0,0,0)"
+      }
+    },
+    "16361066840a222f4b": {
+      "type": "image-with-text",
+      "blocks": {
+        "16361066840a222f4b-0": {
+          "type": "image",
+          "settings": {
+            "subtitle": "Share your latest news",
+            "title": "Write your story",
+            "button_label": "Explore",
+            "url": "",
+            "image_alignment": "50% 50%",
+            "custom_text": "rgba(0,0,0,0)",
+            "custom_overlay": "rgba(0,0,0,0)"
+          }
+        },
+        "16361066840a222f4b-1": {
+          "type": "image",
+          "settings": {
+            "subtitle": "Share your latest news",
+            "title": "Write your story",
+            "button_label": "Explore",
+            "url": "",
+            "image_alignment": "50% 50%",
+            "custom_text": "rgba(0,0,0,0)",
+            "custom_overlay": "rgba(0,0,0,0)"
+          }
+        }
+      },
+      "block_order": [
+        "16361066840a222f4b-0",
+        "16361066840a222f4b-1"
+      ],
+      "settings": {
+        "image_height": "full",
+        "text_alignment": "horizontal-center vertical-middle"
+      }
+    },
+    "1636443645b6d4e74b": {
+      "type": "video-background",
+      "blocks": {
+        "311fd199-9ef1-48bd-9e6e-c8b3897153ed": {
+          "type": "heading",
+          "settings": {
+            "heading": "Talk about your brand",
+            "heading_size": "h2"
+          }
+        }
+      },
+      "block_order": [
+        "311fd199-9ef1-48bd-9e6e-c8b3897153ed"
+      ],
+      "settings": {
+        "video": "\/\/cdn.shopify.com\/s\/files\/1\/0266\/9543\/4315\/files\/Share_your_brand_story_by_adding_a_video_to_your_store.mp4?3663",
+        "video_height": "56.25%",
+        "text_alignment": "horizontal-center vertical-middle",
+        "custom_text": "#ffffff",
+        "custom_overlay": "#000000"
+      }
+    },
+    "1636106679435e5a7a": {
+      "type": "heading",
+      "blocks": {
+        "1636106679435e5a7a-0": {
+          "type": "heading",
+          "settings": {
+            "heading": "Shop The Look",
+            "heading_size": "h2"
+          }
+        },
+        "1636106679435e5a7a-1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Things that goes well together<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "1636106679435e5a7a-0",
+        "1636106679435e5a7a-1"
+      ],
+      "settings": {
+        "text_alignment": "center",
+        "custom_background": "rgba(0,0,0,0)",
+        "custom_text": "rgba(0,0,0,0)"
+      }
+    },
+    "1637226889f182ad79": {
+      "type": "shop-the-look",
+      "blocks": {
+        "163722688971e0662a-2": {
+          "type": "product",
+          "settings": {
+            "product": ""
+          }
+        },
+        "163722688971e0662a-0": {
+          "type": "product",
+          "settings": {
+            "product": ""
+          }
+        },
+        "81c90af3-854f-48fc-944e-353cb3bf4fbb": {
+          "type": "product",
+          "settings": {
+            "product": ""
+          }
+        }
+      },
+      "block_order": [
+        "163722688971e0662a-2",
+        "163722688971e0662a-0",
+        "81c90af3-854f-48fc-944e-353cb3bf4fbb"
+      ],
+      "settings": {}
+    },
+    "1636106675d59d7642": {
+      "type": "rich-text",
+      "blocks": {
+        "1636106675d59d7642-0": {
+          "type": "heading",
+          "settings": {
+            "heading": "Talk about your brand"
+          }
+        },
+        "1636106675d59d7642-1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "1636106675d59d7642-0",
+        "1636106675d59d7642-1"
+      ],
+      "settings": {
+        "title": "Call to action",
+        "btn_label": "More info",
+        "btn_url": "",
+        "desktop_image_positioning": "image-on-left",
+        "bg_overlay": false,
+        "custom_background": "#1c1c1c",
+        "custom_text": "#f3f3f3"
+      }
+    },
+    "1636106673daa45393": {
+      "type": "testimonials",
+      "blocks": {
+        "1636106673daa45393-0": {
+          "type": "text",
+          "settings": {
+            "quote_content": "<p>Add customer reviews and testimonials to showcase your store's happy customers.<\/p>",
+            "quote_author": "Author",
+            "quote_caption": "Customer"
+          }
+        },
+        "1636106673daa45393-1": {
+          "type": "text",
+          "settings": {
+            "quote_content": "<p>Add customer reviews and testimonials to showcase your store's happy customers.<\/p>",
+            "quote_author": "Author",
+            "quote_caption": "Customer"
+          }
+        },
+        "95c555f2-e81f-4479-895d-d65b0f4b142e": {
+          "type": "text",
+          "settings": {
+            "quote_content": "<p>Add customer reviews and testimonials to showcase your store's happy customers.<\/p>",
+            "quote_author": "Author",
+            "quote_caption": "Customer"
+          }
+        },
+        "45940e4e-8ada-4520-b198-d02589033b4a": {
+          "type": "text",
+          "settings": {
+            "quote_content": "<p>Add customer reviews and testimonials to showcase your store's happy customers.<\/p>",
+            "quote_author": "Author",
+            "quote_caption": "Customer"
+          }
+        }
+      },
+      "block_order": [
+        "1636106673daa45393-0",
+        "1636106673daa45393-1",
+        "95c555f2-e81f-4479-895d-d65b0f4b142e",
+        "45940e4e-8ada-4520-b198-d02589033b4a"
+      ],
+      "settings": {
+        "title": "Testimonials",
+        "subtitle": "Share your client's stories",
+        "show_avatars": true,
+        "custom_background": "#212121",
+        "custom_text": "#efefef",
+        "mobile_layout": true
+      }
+    },
+    "1637572030c4b90431": {
+      "type": "collection-slider",
+      "settings": {
+        "title": "Featured collection",
+        "collection": "",
+        "products_per_page": 4,
+        "show_view_all": true
+      }
+    },
+    "163757206347de448b": {
+      "type": "blog-posts",
+      "blocks": {
+        "1637572063adf12f86-0": {
+          "type": "info",
+          "settings": {
+            "show_date": true,
+            "show_author": false
+          }
+        },
+        "1637572063adf12f86-1": {
+          "type": "title",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "1637572063adf12f86-0",
+        "1637572063adf12f86-1"
+      ],
+      "settings": {
+        "title": "Latest Articles",
+        "blog": "news",
+        "post_limit": 4,
+        "show_view_all": true,
+        "custom_text": "#ffffff",
+        "custom_overlay": "#000000"
+      }
+    },
+    "16377493211fd93093": {
+      "type": "featured-product",
+      "blocks": {
+        "1637749321a1e63c4d-0": {
+          "type": "header",
+          "settings": {
+            "show_vendor": true,
+            "show_badge": true,
+            "show_reviews": true,
+            "show_tax_info": false,
+            "show_sku": false,
+            "show_barcode": false
+          }
+        },
+        "1637749321a1e63c4d-1": {
+          "type": "variant_picker",
+          "settings": {
+            "variants_style": "radio",
+            "show_color_swatches": true,
+            "show_quantities": "no"
+          }
+        },
+        "1637749321a1e63c4d-2": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_quantity_selector": true
+          }
+        },
+        "1637749321a1e63c4d-3": {
+          "type": "description",
+          "settings": {}
+        },
+        "a3f4f0ac-9b9b-4965-9f53-d10d3dfcf77c": {
+          "type": "product_link",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "1637749321a1e63c4d-0",
+        "1637749321a1e63c4d-1",
+        "1637749321a1e63c4d-2",
+        "1637749321a1e63c4d-3",
+        "a3f4f0ac-9b9b-4965-9f53-d10d3dfcf77c"
+      ],
+      "settings": {
+        "product": "",
+        "gallery_style": "scroll",
+        "gallery_aspect": false,
+        "gallery_pagination": "dots",
+        "enable_zoom": true,
+        "enable_video_looping": false
+      }
+    },
+    "1637674728c7c82700": {
+      "type": "countdown-banner",
+      "blocks": {
+        "1637674728a99cfc06-0": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Promote your greatest products through a flash sale!<\/p>",
+            "text_size": "text-size--larger"
+          }
+        },
+        "1637674728a99cfc06-1": {
+          "type": "heading",
+          "settings": {
+            "heading": "Sales Promotions",
+            "heading_size": "h1"
+          }
+        },
+        "1637674728a99cfc06-2": {
+          "type": "countdown",
+          "settings": {
+            "countdown_year": 2022,
+            "countdown_month": 1,
+            "countdown_day": 1,
+            "countdown_hour": 0,
+            "countdown_zone": "0"
+          }
+        },
+        "1637674728a99cfc06-3": {
+          "type": "button",
+          "settings": {
+            "button_label": "Shop now",
+            "button_link": "shopify:\/\/pages\/sale"
+          }
+        }
+      },
+      "block_order": [
+        "1637674728a99cfc06-0",
+        "1637674728a99cfc06-1",
+        "1637674728a99cfc06-2",
+        "1637674728a99cfc06-3"
+      ],
+      "settings": {
+        "banner_height": "full",
+        "text_alignment": "horizontal-center vertical-middle",
+        "image_alignment": "50% 50%",
+        "custom_text": "#ffffff",
+        "custom_overlay": "#000000"
+      }
+    },
+    "16371348113d6d6d6d": {
+      "type": "collection-list",
+      "blocks": {
+        "1637134811779b275e-0": {
+          "type": "collection",
+          "settings": {
+            "collection": ""
+          }
+        },
+        "1637134811779b275e-1": {
+          "type": "collection",
+          "settings": {
+            "collection": ""
+          }
+        },
+        "1637134811779b275e-2": {
+          "type": "collection",
+          "settings": {
+            "collection": "kids"
+          }
+        }
+      },
+      "block_order": [
+        "1637134811779b275e-0",
+        "1637134811779b275e-1",
+        "1637134811779b275e-2"
+      ],
+      "settings": {
+        "title": "Collections",
+        "text_alignment": "horizontal-left vertical-bottom",
+        "custom_background": "#eeeeef",
+        "custom_text": "rgba(0,0,0,0)",
+        "bg_overlay": false
+      }
+    },
+    "163825849356f88edc": {
+      "type": "gallery",
+      "blocks": {
+        "1638258493b25d0aa0-0": {
+          "type": "image",
+          "settings": {
+            "alignment": "50% 50%",
+            "link": "",
+            "caption": ""
+          }
+        },
+        "1638258493b25d0aa0-1": {
+          "type": "image",
+          "settings": {
+            "alignment": "50% 50%",
+            "link": "",
+            "caption": ""
+          }
+        },
+        "1638258493b25d0aa0-2": {
+          "type": "image",
+          "settings": {
+            "alignment": "50% 50%",
+            "link": "",
+            "caption": ""
+          }
+        }
+      },
+      "block_order": [
+        "1638258493b25d0aa0-0",
+        "1638258493b25d0aa0-1",
+        "1638258493b25d0aa0-2"
+      ],
+      "settings": {
+        "image_height": "half"
+      }
+    }
+  },
+  "order": [
+    "16372498804121dda9",
+    "16372293330d0f5bf6",
+    "1637571021f6bdff72",
+    "16361066840a222f4b",
+    "1636443645b6d4e74b",
+    "1636106679435e5a7a",
+    "1637226889f182ad79",
+    "1636106675d59d7642",
+    "1636106673daa45393",
+    "1637572030c4b90431",
+    "163757206347de448b",
+    "16377493211fd93093",
+    "1637674728c7c82700",
+    "16371348113d6d6d6d",
+    "163825849356f88edc"
+  ]
+}

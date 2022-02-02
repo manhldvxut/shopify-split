@@ -1,0 +1,82 @@
+<product-recommendations class="product-recommendations site-box site-box-container" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=4" style="min-height:1px">
+
+  {%- if recommendations.performed and recommendations.products_count > 0 -%}
+
+    <div id="section-related-products" style="width:100%">
+
+      <div class="site-box box--big lap--box--small-fl-auto palm--box--small-fl box--typo-big box--center-align box--column-flow box__heading">
+        <div class="site-box-content">
+          <h2 class="title h1">{{ section.settings.heading | escape }}</h2>
+          {%- if settings.headings_hr -%} <hr /> {%- endif -%}
+        </div>
+      </div> 
+
+      <div data-count="{{ recommendations.products.size | modulo: 4 }}" class="product-grid-border-fix fix-borders-split">
+
+        {%- for product in recommendations.products -%}
+          
+          <div class="site-box box--small lap--box--small-lg box--typo-small box--center-align box--no-padding box--column-flow box__collection active">
+            <div class="site-box-content product-holder">
+              {%- render 'product-item', product: product, index: forloop.index0 -%}
+            </div>
+          </div>
+
+        {%- endfor -%}
+
+      </div>
+
+    </div>
+
+  {%- endif -%}
+
+</product-recommendations>
+
+{% javascript %}
+  class ProductRecommendations extends HTMLElement {
+    constructor() {
+      super();
+      const handleIntersection = (entries, observer) => {
+        if (!entries[0].isIntersecting) return;
+        observer.unobserve(this);
+        fetch(this.dataset.url)
+          .then(response => response.text())
+          .then(text => {
+            const innerHTML = new DOMParser()
+                .parseFromString(text, 'text/html')
+                .querySelector('product-recommendations');
+            if ( innerHTML && innerHTML.querySelectorAll('.product-item').length > 0 ) {
+              this.innerHTML = innerHTML.innerHTML;
+              window.preloadImages(this);
+            }
+          })
+          .catch(e => {
+            console.error(e);
+          });
+      }
+
+      new IntersectionObserver(handleIntersection.bind(this), {rootMargin: '0px 0px 200px 0px'}).observe(this);
+    }
+  }
+
+  customElements.define('product-recommendations', ProductRecommendations);
+{% endjavascript %}
+
+{% schema %}
+  {
+    "name": "t:sections.product-recommendations.name",
+    "class": "shopify-section-product-recommendations",
+    "settings": [
+      {
+        "type": "header",
+        "content": "t:sections.product-recommendations.settings.header__1.content",
+        "info": "t:sections.product-recommendations.settings.header__1.info"
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "t:sections.product-recommendations.settings.heading.label",
+        "default": "You may also like"
+      }
+    ]
+  }
+{% endschema %}

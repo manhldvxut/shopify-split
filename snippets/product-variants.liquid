@@ -1,0 +1,53 @@
+{%- if style == 'minimal' -%}
+
+{%- liquid assign color_label = 'color,colour,couleur,colore,culoare,farbe,색,色,カラー,färg,farve' | split: ',' -%}
+  
+  {%- for option in product.options_with_values -%}
+    {%- assign downcased_option = option.name | downcase -%}
+
+    <div class="product-variant" data-name="product-{{ option.name | escape | downcase | strip }}">
+
+      <span class="product-variant-holder__label">{{ option.name }}</span>
+
+      <div class="product-variant__container">
+        {%- for value in option.values -%}
+          <div class="product-variant__item 
+            {% if color_label contains downcased_option %} 
+              product-variant__item--color 
+            {% endif %}
+          ">
+            <input type="radio" name="product-{{ option.name | escape | downcase | strip }}" id="{{ product.handle }}-option-{{ option.name | escape | downcase | strip }}-{{ forloop.index }}" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %} class="product-variant__input">
+            <label for="{{ product.handle }}-option-{{ option.name | escape | downcase | strip }}-{{ forloop.index }}" class="product-variant__label">
+              {%- if color_label contains downcased_option -%}
+                {%- assign color_swatch_name = value | handle | append: '.png' -%}
+                {%- assign color_swatch_image = images[color_swatch_name] -%}
+                <span aria-hidden="true" style="{% if color_swatch_image != blank %} background-image: url({{ color_swatch_image | img_url: '44x44' }} {% else %} background-color: {{ value | escape | replace: ' ', '' | downcase }} {% endif %}"></span>
+                {{ value }}
+              {%- else -%}
+                {{ value }}
+              {%- endif -%}
+            </label>
+          </div>
+        {%- endfor -%}
+      </div>
+
+    </div>
+
+  {%- endfor -%}
+
+{%- else -%}
+
+  {%- for option in product.options_with_values -%}
+    <div class="product-variant selector-wrapper">
+      <label class="product-variant-holder__label" for="product-{{ option.name | downcase | strip }}">{{ option.name }}</label>
+      <select class="product-variants" id="product-{{ option.name | downcase | strip }}">
+        {%- for value in option.values -%}
+          <option value="{{ value | escape }}" {% if option.selected_value == value %}selected{% endif %}>{{ value | escape }}</option>
+        {%- endfor -%}
+      </select>
+    </div>
+  {%- endfor -%}
+
+{%- endif -%}
+
+                

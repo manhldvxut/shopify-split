@@ -1,0 +1,111 @@
+<div class="site-social" aria-label="{{ 'general.social_profiles' | t }}">
+
+	{%- if settings.social_twitter != '' -%}
+		<a href="{{ settings.social_twitter | escape }}" target="_blank" aria-label="Twitter">
+			<span class="icon {{ size }}" aria-hidden="true">{% render 'theme-symbols', icon: 'social_twitter' %}</span>
+			{%- if type == 'footer' -%}
+				<span class="text underline-animation">Twitter</span>
+			{%- endif -%}
+		</a>
+	{%- endif -%}
+
+	{%- if settings.social_facebook != '' -%}
+		<a href="{{ settings.social_facebook | escape }}" target="_blank" aria-label="Facebook">
+			<span class="icon {{ size }}" aria-hidden="true">{% render 'theme-symbols', icon: 'social_facebook' %}</span>
+			{%- if type == 'footer' -%}
+				<span class="text underline-animation">Facebook</span>
+			{%- endif -%}
+		</a>
+	{%- endif -%}
+
+	{%- if settings.social_youtube != '' -%}
+		<a href="{{ settings.social_youtube | escape }}" target="_blank" aria-label="YouTube">
+			<span class="icon {{ size }}" aria-hidden="true">{% render 'theme-symbols', icon: 'social_youtube' %}</span>
+			{%- if type == 'footer' -%}
+				<span class="text underline-animation">YouTube</span>
+			{%- endif -%}
+		</a>
+	{%- endif -%}
+
+	{%- if settings.social_vimeo != '' -%}
+		<a href="{{ settings.social_vimeo | escape }}" target="_blank" aria-label="Vimeo">
+			<span class="icon {{ size }}" aria-hidden="true">{% render 'theme-symbols', icon: 'social_vimeo' %}</span>
+			{%- if type == 'footer' -%}
+				<span class="text underline-animation">Vimeo</span>
+			{%- endif -%}
+		</a>
+	{%- endif -%}
+
+	{%- if settings.social_pinterest != '' -%}
+		<a href="{{ settings.social_pinterest | escape }}" target="_blank" aria-label="Pinterest">
+			<span class="icon {{ size }}" aria-hidden="true">{% render 'theme-symbols', icon: 'social_pinterest' %}</span>
+			{%- if type == 'footer' -%}
+				<span class="text underline-animation">Pinterest</span>
+			{%- endif -%}
+		</a>
+	{%- endif -%}
+
+	{%- if settings.social_tumblr != '' -%}
+		<a href="{{ settings.social_tumblr | escape }}" target="_blank" aria-label="Tumblr">
+			<span class="icon {{ size }}" aria-hidden="true">{% render 'theme-symbols', icon: 'social_tumblr' %}</span>
+			{%- if type == 'footer' -%}
+				<span class="text underline-animation">Tumblr</span>
+			{%- endif -%}
+		</a>
+	{%- endif -%}
+
+	{%- if settings.social_instagram != '' -%}
+		<a href="{{ settings.social_instagram | escape }}" target="_blank" aria-label="Instagram">
+			<span class="icon {{ size }}" aria-hidden="true">{% render 'theme-symbols', icon: 'social_instagram' %}</span>
+			{%- if type == 'footer' -%}
+				<span class="text underline-animation">Instagram</span>
+			{%- endif -%}
+		</a>
+	{%- endif -%}
+
+	{%- if settings.social_tiktok != '' -%}
+		<a href="{{ settings.social_tiktok | escape }}" target="_blank" aria-label="TikTok">
+			<span class="icon {{ size }}" aria-hidden="true">{% render 'theme-symbols', icon: 'social_tiktok' %}</span>
+			{%- if type == 'footer' -%}
+				<span class="text underline-animation">TikTok</span>
+			{%- endif -%}
+		</a>
+	{%- endif -%}
+
+	{%- if settings.social_linkedin != '' -%}
+		<a href="{{ settings.social_linkedin | escape }}" target="_blank" aria-label="LinkedIn">
+			<span class="icon {{ size }}" aria-hidden="true">{% render 'theme-symbols', icon: 'social_linkedin' %}</span>
+			{%- if type == 'footer' -%}
+				<span class="text underline-animation">LinkedIn</span>
+			{%- endif -%}
+		</a>
+	{%- endif -%}
+
+	{%- if settings.social_flickr != '' -%}
+		<a href="{{ settings.social_flickr | escape }}" target="_blank" aria-label="Flickr">
+			<span class="icon {{ size }}" aria-hidden="true">{% render 'theme-symbols', icon: 'social_flickr' %}</span>
+			{%- if type == 'footer' -%}
+				<span class="text underline-animation">Flickr</span>
+			{%- endif -%}
+		</a>
+	{%- endif -%}
+
+	{%- if settings.social_reddit != '' -%}
+		<a href="{{ settings.social_reddit | escape }}" target="_blank" aria-label="Reddit">
+			<span class="icon {{ size }}" aria-hidden="true">{% render 'theme-symbols', icon: 'social_reddit' %}</span>
+			{%- if type == 'footer' -%}
+				<span class="text underline-animation">Reddit</span>
+			{%- endif -%}
+		</a>
+	{%- endif -%}
+
+	{%- if settings.social_email != '' -%}
+		<a href="mailto:{{ settings.social_email | escape }}" target="_blank" aria-label="Email">
+			<span class="icon {{ size }}" aria-hidden="true">{% render 'theme-symbols', icon: 'social_email' %}</span>
+			{%- if type == 'footer' -%}
+				<span class="text underline-animation">Email</span>
+			{%- endif -%}
+		</a>
+	{%- endif -%}
+
+</div>

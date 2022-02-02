@@ -1,0 +1,40 @@
+<div id="section-page" class="site-box-container container--fullscreen box--can-stick">
+
+  <div class="site-box box--big lap--box--small-fl-auto box--typo-big box--top-align box--column-flow box__heading" data-order="0">
+
+    <div class="reduce-top-margin">
+      <div class="site-box-content">
+        <h1 class="title h1">{{ 'general.404.title' | t }}</h1>
+        {%- if settings.headings_hr -%} <hr /> {%- endif -%}
+      </div>
+    </div>
+
+  </div>
+
+  <div class="site-box box--big lap--box--bigger box__text box--typo-big box--top-align box--column-flow" data-order="1">
+
+    <div class="site-box-content reduce-top-margin">
+      <div>
+        <div>
+          {{ 'general.404.subtitle' | t }}
+          <div class="buttons-holder" style="margin-top:2em">
+            <a href="{{ routes.all_products_collection_url }}" class="button button--solid" style="text-align:center">
+              <span class="button-scroll-in">{{ 'general.404.continue_browsing' | t }}</span>
+            </a>
+            <a href="{{ routes.search_url }}" class="button button--outline" style="text-align:center">
+              <span class="button-scroll-in">{{ 'general.404.search' | t }}</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+{% schema %}
+  {
+    "name": "t:sections.split-extra-words.sections.main-404.name"
+  }
+{% endschema %}

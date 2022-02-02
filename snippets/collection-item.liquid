@@ -1,0 +1,46 @@
+<a href="{{ collection.url | escape }}" title="{{ collection.title | escape }}"
+  id="block-{{ block.id }}" {{ block.shopify_attributes }} 
+  class="site-box box--column-flow {% if size == 1 %} box--bigger {% else %} box--small-fl {% endif %} lap--box--small-fl box__image-text {{ text_alignment }} hard-align"
+>
+
+  <div class="site-box-content site-box-content-to-focus">
+
+    <div class="content"><span class="title h3" style="margin-bottom:0">
+      <span class="underline-animation underline-mobile">
+        {%- liquid  
+          if collection.title != blank
+            echo collection.title | escape
+          else
+            echo 'general.onboarding.collection_title' | t
+          endif
+        -%}
+      </span>
+    </span></div>
+
+  </div>
+
+  <span class="site-box-background {% if custom_overlay == true %} with-image {% endif %} {% if text_alignment contains 'vertical-middle' %} no-preloader {% endif %}" aria-hidden="true">
+
+      {%- liquid
+
+        if block.settings.image != blank
+          assign collection_image = block.settings.image
+        else
+          assign collection_image = collection.featured_image
+        endif
+
+        if collection_image != blank
+          assign collection_id = id | append: '-' | append: collection.id
+          render 'lazy-image', image: collection_image, id: collection_id, sizes: '100vw'
+        else
+          echo '<span class="onboarding-svg">'
+            assign no = index | modulo: 6 | plus: 1
+            echo 'collection-X' | replace: 'X', no | placeholder_svg_tag
+          echo '</span>'
+        endif
+
+      -%}
+
+  </span>
+
+</a>

@@ -1,0 +1,202 @@
+{%- if section.blocks.size > 0 -%}
+
+  <div id="section-{{ section.id }}" class="site-box-container container--fullscreen" style="border:none">
+
+    {%- liquid 
+      assign index_at_loop = 0
+      assign page_at_loop = 1
+      assign size_at_loop = section.blocks.size | at_most: 4
+      assign full_loop = section.blocks.size | divided_by: 4 | floor | plus: 1
+      assign half_loop = section.blocks.size | modulo: 4
+    -%}
+
+    {%- for block in section.blocks -%}
+
+      {%- liquid 
+
+        assign index_at_loop = index_at_loop | plus: 1 
+
+        if section.settings.image_height == "half"
+
+          if size_at_loop == 1 
+            assign size_class = "box--small-fl"
+          elsif size_at_loop == 2
+            assign size_class = "box--small-lg palm--box--small-fl"
+          elsif size_at_loop == 3
+            assign size_class = "box--third-fl palm--box--small-fl"
+          elsif size_at_loop == 4 
+            assign size_class = "box--small lap--box--small-lg palm--box--small-fl"
+          endif
+
+        else
+
+          if size_at_loop == 1
+            assign size_class = "box--bigger lap--box--66"
+          elsif size_at_loop == 2
+            assign size_class = "box--big lap--box--big palm--box--bigger"
+          elsif size_at_loop == 3
+            assign size_class = "box--third-big lap--box--33 palm--box--bigger"
+          elsif size_at_loop == 4
+            assign size_class = "box--forth-big lap--box--big palm--box--bigger"
+          endif
+
+        endif
+
+      -%}
+
+      <div class="site-box box--center-align box--column-flow {{ size_class }} box__image-text box__gallery" {{ block.shopify_attributes }}>
+
+        {%- unless block.settings.link == blank -%}
+          <a href="{{ block.settings.link }}">
+        {%- endunless -%}
+
+          <div class="site-box-background">
+            {%- unless block.settings.image == blank -%}
+
+              {%- liquid
+                render 'lazy-image', image: block.settings.image, id: block.id, image_alignment: block.settings.alignment, sizes: '100vw'
+                if settings.show_preloader
+                  render 'preloader'
+                endif
+              -%}
+
+              {%- unless block.settings.caption == blank -%}
+                <span class="caption">{{ block.settings.caption | escape }}</span>
+              {%- endunless -%}
+
+            {%- else -%}
+              <span class="onboarding-svg">{{ 'image' | placeholder_svg_tag }}</span>
+            {%- endunless -%}
+          </div>
+
+        {%- unless block.settings.link == blank -%}
+          </a>
+        {%- endunless -%}
+
+      </div>
+
+      {%- liquid 
+        if index_at_loop == 4
+          assign index_at_loop = 0
+          assign page_at_loop = page_at_loop | plus: 1
+          if page_at_loop == full_loop
+            assign size_at_loop = half_loop
+          endif
+          echo '<span class="clearfix"></span>'
+        endif
+      -%}
+
+    {%- endfor -%}
+
+  </div>
+    
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.gallery.name",
+  "class": "index-section",
+  "blocks": [
+    {
+      "name": "t:sections.gallery.blocks.image.name",
+      "type": "image",
+      "settings": [
+        {
+          "id": "image",
+          "type": "image_picker",
+          "label": "t:sections.gallery.blocks.image.settings.image.label"
+        },
+        {
+          "id": "alignment",
+          "type": "select",
+          "options": [
+            {
+              "value": "0% 0%",
+              "label": "t:sections.split-extra-words.sections.image-with-text.settings.image_alignment.options__1"
+            },
+            {
+              "value": "50% 0%",
+              "label": "t:sections.split-extra-words.sections.image-with-text.settings.image_alignment.options__2"
+            },
+            {
+              "value": "100% 0%",
+              "label": "t:sections.split-extra-words.sections.image-with-text.settings.image_alignment.options__3"
+            },
+            {
+              "value": "0% 50%",
+              "label": "t:sections.split-extra-words.sections.image-with-text.settings.image_alignment.options__4"
+            },
+            {
+              "value": "50% 50%",
+              "label": "t:sections.split-extra-words.sections.image-with-text.settings.image_alignment.options__5"
+            },
+            {
+              "value": "100% 50%",
+              "label": "t:sections.split-extra-words.sections.image-with-text.settings.image_alignment.options__6"
+            },
+            {
+              "value": "0% 100%",
+              "label": "t:sections.split-extra-words.sections.image-with-text.settings.image_alignment.options__7"
+            },
+            {
+              "value": "50% 100%",
+              "label": "t:sections.split-extra-words.sections.image-with-text.settings.image_alignment.options__8"
+            },
+            {
+              "value": "100% 100%",
+              "label": "t:sections.split-extra-words.sections.image-with-text.settings.image_alignment.options__9"
+            }
+          ],
+          "default": "50% 50%",
+          "label": "t:sections.split-extra-words.sections.image-with-text.settings.image_alignment.label"
+        },
+        {
+          "id": "link",
+          "type": "url",
+          "label": "t:sections.image-with-text.blocks.image.settings.url.label"
+        },
+        {
+          "id": "caption",
+          "type": "text",
+          "label": "t:sections.gallery.blocks.image.settings.caption.label"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "image_height",
+      "label": "t:sections.split-extra-words.sections.image-with-text.settings.image_height.label",
+      "options": [
+        {
+          "value": "half",
+          "label": "t:sections.split-extra-words.sections.image-with-text.settings.image_height.options__1"
+        },
+        {
+          "value": "full",
+          "label": "t:sections.split-extra-words.sections.image-with-text.settings.image_height.options__2"
+        }
+      ],
+      "default": "half"
+    }
+  ],
+  "presets": [{
+    "name": "t:sections.gallery.name",
+    "blocks": [
+      {
+        "type": "image"
+      },
+      {
+        "type": "image"
+      },
+      {
+        "type": "image"
+      },
+      {
+        "type": "image"
+      }
+    ]
+  }]
+}
+{% endschema %}

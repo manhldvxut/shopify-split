@@ -1,0 +1,32 @@
+{%- if background != 'rgba(0,0,0,0)' -%}
+  <style>
+    #{% if type == 'block' %}block{% else %}section{% endif %}-{{ id }} {
+      --main-background: {{ background }};
+    }
+  </style>
+{%- endif -%}
+
+{%- if text != 'rgba(0,0,0,0)' -%}
+  {%- liquid
+
+    assign borders_opacity = 0.08
+    assign backgrounds_opacity = 0.18
+
+    assign custom_text_brightness = text | color_brightness
+    if custom_text_brightness > 150 
+      assign custom_text_foreground = '#000' 
+    else 
+      assign custom_text_foreground = '#fff' 
+    endif 
+    assign custom_borders = text | color_modify: 'alpha', borders_opacity
+
+  -%}
+  <style>
+    #{% if type == 'block' %}block{% else %}section{% endif %}-{{ id }} {
+      --main-text: {{ text }};
+      --main-text-foreground: {{ custom_text_foreground }};
+      --main-background-secondary: {{ text | color_modify: 'alpha', backgrounds_opacity }};
+      --main-borders: {{ custom_borders }};
+    }
+  </style>
+{%- endif -%}

@@ -1,0 +1,61 @@
+<div id="section-page" class="site-box-container container--fullscreen {% unless section.settings.layout == 'full' %} box--can-stick {% endunless %}">
+
+  <div class="site-box 
+    {% if section.settings.layout == 'full' %} 
+      box--small-fl-auto box--center-align 
+    {% else %} 
+      box--big box--top-align
+    {% endif %} 
+  lap--box--small-fl-auto box--typo-big box--column-flow box__heading" data-order="0">
+
+    <div class="{% if section.settings.layout == 'split' %} reduce-top-margin {% endif %}">
+      <div class="site-box-content" {% if section.settings.layout == 'full' %} style="text-align:center" {% endif %}>
+        <h1 class="title h1">{{ page.title }}</h1>
+        {%- if settings.headings_hr -%} <hr {% if section.settings.layout == 'full' %} style="margin-left:auto;margin-right:auto" {% endif %} /> {%- endif -%}
+      </div>
+    </div>
+
+  </div>
+
+  {%- unless page.content == blank -%}
+
+    <div class="site-box {% if section.settings.layout == 'full' %} box--bigger {% else %} box--big {% endif %} lap--box--bigger box__text box--typo-big box--top-align box--column-flow" data-order="1">
+
+      <div class="site-box-content {% if section.settings.layout == 'split' %} reduce-top-margin {% endif %}">
+        <div>
+          <div class="rte">
+            {{ page.content }}
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  {%- endunless -%}
+
+</div>
+
+{% schema %}
+  {
+    "name": "t:sections.split-extra-words.sections.main-page.name",
+    "settings": [
+      {
+        "type": "select",
+        "id": "layout",
+        "label": "t:sections.split-extra-words.sections.main-collection-page.settings.desktop_layout.label",
+        "options": [
+          {
+            "value": "split",
+            "label": "t:sections.split-extra-words.sections.main-collection-page.settings.desktop_layout.options__1"
+          },
+          {
+            "value": "full",
+            "label": "t:sections.split-extra-words.sections.main-collection-page.settings.desktop_layout.options__2"
+          }
+        ],
+        "info": "t:sections.split-extra-words.sections.main-collection-page.settings.desktop_layout.info",
+        "default": "split"
+      }
+    ]
+  }
+{% endschema %}

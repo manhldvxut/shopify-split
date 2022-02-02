@@ -1,0 +1,56 @@
+<div id="section-cart" class="site-box-container container--fullscreen box--can-stick">
+
+  <div class="site-box box--big lap--box--small-fl-auto box--typo-big box--top-align box--column-flow box__heading" data-order="0">
+    <div class="reduce-top-margin">
+      <div class="site-box-content">
+        <h1 class="title h1">{{ 'cart.title' | t }}</h1>
+        {%- if cart.item_count > 0 -%}
+          <span class="subtitle">{{ 'sidebar.cart.items_count' | t: count: cart.item_count }}</span> 
+        {%- endif -%}
+        {%- if settings.headings_hr -%} <hr /> {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  <div class="site-box box--big lap--box--bigger box--top-align box--column-flow box__text" data-order="1">
+
+    <div class="site-box-content reduce-top-margin">
+
+      <div>
+
+        {%- if cart.item_count > 0 -%}
+
+          {%- render 'cart-form', type: 'page' -%}
+          {%- render 'cart-subtotal' -%}
+
+          <template>
+            <div class="main-cart-empty-content">
+              <p>{{ 'cart.empty' | t }}</p>
+              <a href="{{ routes.all_products_collection_url }}" class="button button--solid">
+                <span class="button-scroll-in">{{ 'cart.continue_browsing' | t }}</span>
+              </a>
+            </div>
+          </template>
+
+        {%- else -%}
+
+          <p>{{ 'cart.empty' | t }}</p>
+          <a href="{{ routes.all_products_collection_url }}" class="button button--solid">
+            <span class="button-scroll-in">{{ 'cart.continue_browsing' | t }}</span>
+          </a>
+
+        {%- endif -%}
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.split-extra-words.settings_schema.cart.page"
+}
+{% endschema %}
